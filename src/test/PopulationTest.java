@@ -24,8 +24,8 @@ public class PopulationTest {
         City city4 = new City(10,0);
 
         //prepare routes
-        Route route1 = new Route(Arrays.asList(city1,city2,city3,city4)); //60
-        Route route2 = new Route(Arrays.asList(city1,city3,city2,city4)); //64,72
+        Route route1 = new Route(new City[]{city1,city2,city3,city4}); //60
+        Route route2 = new Route(new City[]{city1,city3,city2,city4}); //64,72
 
         //create population
         Population population = new Population(new Route[]{route1,route2});

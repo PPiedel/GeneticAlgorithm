@@ -20,7 +20,7 @@ public class RouteTest {
         City city1 = new City(0, 0);
         City city2 = new City(10, 10);
         City city3 = new City(20, 20);
-        Route route = new Route(Arrays.asList(city1, city2, city3));
+        Route route = new Route(new City[]{city1, city2, city3});
 
         double distance1 = city1.distanceTo(city2);
         double distace2 = city2.distanceTo(city3);
@@ -33,9 +33,76 @@ public class RouteTest {
     @Test
     public void getTotalDistanceShouldReturnZero() throws Exception {
         City city = new City(100, 100);
-        Route route = new Route(Collections.singletonList(city));
+        Route route = new Route(new City[]{city});
 
         assertEquals(0, route.getTotalDistance());
+    }
+
+    @Test
+    public void shuffleCities() throws Exception {
+        City city1 = new City(0, 0);
+        City city2 = new City(10, 10);
+        City city3 = new City(20, 20);
+        Route route = new Route(new City[]{city1, city2, city3});
+        System.out.println(""+route.toString());
+
+        route.shuffleCities();
+
+        System.out.println(""+route.toString());
+    }
+
+    @Test
+    public void findFirstFreeIndexShouldReturnZero() throws Exception {
+        City city1 = new City(0, 0);
+        City city2 = new City(10, 10);
+
+        Route route = new Route(3);
+        route.setCity(city1,1);
+        route.setCity(city2,2);
+
+        int index = route.findFirstFreeIndex(0);
+
+        assertEquals(0,index);
+    }
+
+    @Test
+    public void findFirstFreeIndexShouldReturnMinusOne() throws Exception {
+        City city1 = new City(0, 0);
+        City city2 = new City(10, 10);
+        City city3 = new City(20, 20);
+        Route route = new Route(new City[]{city1, city2, city3});
+
+        int index = route.findFirstFreeIndex(0);
+
+        assertEquals(-1,index);
+    }
+
+    @Test
+    public void findFirstFreeIndexShouldReturn1() throws Exception {
+        City city1 = new City(0, 0);
+        City city2 = new City(10, 10);
+
+        Route route = new Route(3);
+        route.setCity(city1,0);
+        route.setCity(city2,1);
+
+        int index = route.findFirstFreeIndex(0);
+
+        assertEquals(1,index);
+    }
+
+    @Test
+    public void findFirstFreeIndexShouldReturn2() throws Exception {
+        City city1 = new City(0, 0);
+        City city2 = new City(10, 10);
+        City city3 = new City(20, 20);
+        Route route = new Route(3);
+        route.setCity(city1,0);
+        route.setCity(city2,2);
+
+        int index = route.findFirstFreeIndex(0);
+
+        assertEquals(1,index);
     }
 
 }

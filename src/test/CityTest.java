@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CityTest {
 
     @Test
-    public void distanceTo() throws Exception {
+    public void distanceToShouldReturnValue() throws Exception {
         City city = new City(100, 200);
         City scndCity = new City(200, 400);
 

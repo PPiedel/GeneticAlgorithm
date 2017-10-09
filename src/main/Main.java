@@ -16,7 +16,7 @@ public class Main {
         City city2 = new City(0,20);
         City city3 = new City(10, 20);
         City city4 = new City(10,0);
-        List<City> cities = Arrays.asList(city1,city2,city3,city4);
+        City[] cities = new City[]{city1,city2,city3,city4};
 
         geneticAlgorithm.ga(cities);
     }

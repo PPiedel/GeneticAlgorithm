@@ -41,11 +41,11 @@ public class Population {
                 worseDistance = route.getTotalDistance();
             }
         }
-        
+
         return worseDistance;
     }
 
-    public void initializeRoutesInRandomOrder(List<City> cities) {
+    public void initializeRoutesInRandomOrder(City[] cities) {
         for (int i = 0; i < routes.length; i++) {
             Route randomRoute = new Route(cities);
             randomRoute.shuffleCities();
