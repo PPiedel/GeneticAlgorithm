@@ -2,6 +2,9 @@ package main;
 
 import java.util.List;
 
+import static main.GeneticAlgorithm.TOURNAMENT_SIZE;
+import static main.Util.randomWithRange;
+
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
@@ -52,5 +55,19 @@ public class Population {
 
             routes[i] = randomRoute;
         }
+    }
+
+    public Route selectRouteViaTournament(){
+        int bestIndex = Integer.MAX_VALUE;
+        int bestValue = Integer.MAX_VALUE;
+
+        for (int i=0; i< TOURNAMENT_SIZE; i++){
+            int index = randomWithRange(0,routes.length-1);
+            if (routes[index].getTotalDistance() < bestValue){
+                bestIndex = index;
+            }
+        }
+
+        return routes[bestIndex];
     }
 }

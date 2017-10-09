@@ -1,5 +1,9 @@
 package main;
 
+import java.util.Random;
+
+import static main.Util.randomWithRange;
+
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
@@ -7,7 +11,9 @@ public class GeneticAlgorithm implements Algorithm {
     private double mutationProbability;
     private double crossoverProbabilty;
     private int populationSize;
-    public static final int generationsNumber = 100;
+
+    public static final int GENERATIONS_NUMBER = 100;
+    public static final int TOURNAMENT_SIZE = 10;
 
     private double[] bestDistances;
 
@@ -29,7 +35,7 @@ public class GeneticAlgorithm implements Algorithm {
         Population initialPopulation = new Population(cities.length);
         initialPopulation.initializeRoutesInRandomOrder(cities);
 
-        for (int i = 0; i < generationsNumber; i++) {
+        for (int i = 0; i < GENERATIONS_NUMBER; i++) {
 
         }
     }
@@ -52,10 +58,7 @@ public class GeneticAlgorithm implements Algorithm {
         return Math.random() < mutationProbability;
     }
 
-    public int randomWithRange(int min, int max) {
-        int range = (max - min) + 1;
-        return (int) (Math.random() * range) + min;
-    }
+
 
     public Route[] crossover(Route parent1, Route parent2) {
         Route[] childs = new Route[2];
@@ -103,4 +106,6 @@ public class GeneticAlgorithm implements Algorithm {
 
         return childs;
     }
+
+
 }
