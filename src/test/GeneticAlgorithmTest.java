@@ -16,7 +16,7 @@ public class GeneticAlgorithmTest {
 
     @Test
     public void mutate() throws Exception {
-        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(1);
         geneticAlgorithm.setMutationProbability(1);
 
         //prepare route

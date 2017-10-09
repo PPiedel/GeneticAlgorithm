@@ -1,5 +1,7 @@
 package main;
 
+import java.util.List;
+
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
@@ -7,9 +9,13 @@ public class GeneticAlgorithm implements Algorithm {
     private double mutationProbability;
     private double crossoverProbabilty;
     private int populationSize;
-    private int generationsNumber;
+    public static final int generationsNumber = 100;
 
-    public GeneticAlgorithm() {
+    private double[] bestDistances;
+
+    public GeneticAlgorithm(int populationSize) {
+        this.populationSize = populationSize;
+        bestDistances  = new double[populationSize];
     }
 
     public void setMutationProbability(double mutationProbability) {
@@ -19,6 +25,15 @@ public class GeneticAlgorithm implements Algorithm {
     @Override
     public double calculateShortestRoute() {
         return 0;
+    }
+
+    public void ga(List<City> cities){
+        Population initialPopulation = new Population(cities.size());
+        initialPopulation.initializeRoutesInRandomOrder(cities);
+
+        for (int i=0; i<generationsNumber; i++){
+
+        }
     }
 
     public void  mutate(Route route) {

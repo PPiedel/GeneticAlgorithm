@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +42,10 @@ public class Route {
 
     public boolean contains(City city){
         return cities.contains(city);
+    }
+
+    public void shuffleCities(){
+        Collections.shuffle(cities);
     }
 
     @Override
