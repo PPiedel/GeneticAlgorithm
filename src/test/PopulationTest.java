@@ -6,7 +6,6 @@ import main.Route;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,7 +30,7 @@ public class PopulationTest {
         //create population
         Population population = new Population(new Route[]{route1,route2});
 
-        double bestDistance = population.evaluate();
+        double bestDistance = population.getBestDistance();
 
         assertEquals(60,bestDistance);
 

@@ -1,7 +1,5 @@
 package main;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,18 +16,37 @@ public class Population {
         this.routes = routes;
     }
 
-    public double evaluate(){
+    public double getBestDistance() {
         double bestDistance = Integer.MAX_VALUE;
-        for (Route route : routes){
-            if (route.getTotalDistance() < bestDistance){
+        for (Route route : routes) {
+            if (route.getTotalDistance() < bestDistance) {
                 bestDistance = route.getTotalDistance();
             }
         }
         return bestDistance;
     }
 
-    public void initializeRoutesInRandomOrder(List<City> cities){
-        for (int i=0; i< routes.length; i++){
+    public double getAverageDistance() {
+        double sum = 0;
+        for (Route route : routes) {
+            sum += route.getTotalDistance();
+        }
+        return sum / routes.length;
+    }
+
+    public double getWorseDistance() {
+        double worseDistance = Integer.MIN_VALUE;
+        for (Route route : routes) {
+            if (route.getTotalDistance() > worseDistance) {
+                worseDistance = route.getTotalDistance();
+            }
+        }
+        
+        return worseDistance;
+    }
+
+    public void initializeRoutesInRandomOrder(List<City> cities) {
+        for (int i = 0; i < routes.length; i++) {
             Route randomRoute = new Route(cities);
             randomRoute.shuffleCities();
 
