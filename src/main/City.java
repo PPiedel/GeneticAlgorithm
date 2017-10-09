@@ -28,7 +28,15 @@ public class City {
         this.y = y;
     }
 
-    public double distanceTo(City city){
-        return Math.sqrt((x-city.getX())*(x-city.getX()) + (y-city.getY())*(y-city.getY()));
+    public double distanceTo(City city) {
+        return Math.sqrt((x - city.getX()) * (x - city.getX()) + (y - city.getY()) * (y - city.getY()));
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }
