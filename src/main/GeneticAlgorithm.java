@@ -1,42 +1,56 @@
 package main;
 
-import java.util.Random;
-
 import static main.Util.randomWithRange;
 
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
-public class GeneticAlgorithm implements Algorithm {
-    private double mutationProbability;
-    private double crossoverProbabilty;
-    private int populationSize;
+public class GeneticAlgorithm {
 
-    public static final int GENERATIONS_NUMBER = 100;
-    public static final int TOURNAMENT_SIZE = 10;
+    public static int POPULATION_SIZE = 50;
+    public static int GENERATIONS_NUMBER = 50;
+    public static double[] bests = new double[GENERATIONS_NUMBER];
+    public static double[] avgs = new double[GENERATIONS_NUMBER];
+    public static double[] worsts = new double[GENERATIONS_NUMBER];
+    public static double MUTATION_PROBABILITY = 0.2;
+    public static double CROSSOVER_PROBABILTY = 0.1;
+    public static int TOURNAMENT_SIZE = 5;
 
-    private double[] bestDistances;
 
-    public GeneticAlgorithm(int populationSize) {
-        this.populationSize = populationSize;
-        bestDistances = new double[populationSize];
-    }
+    public GeneticAlgorithm() {}
 
-    public void setMutationProbability(double mutationProbability) {
-        this.mutationProbability = mutationProbability;
-    }
-
-    @Override
-    public double calculateShortestRoute() {
-        return 0;
-    }
 
     public void ga(City[] cities) {
-        Population initialPopulation = new Population(cities.length);
-        initialPopulation.initializeRoutesInRandomOrder(cities);
+        Population population = new Population(cities.length);
+        population.initializeRoutesInRandomOrder(cities);
 
         for (int i = 0; i < GENERATIONS_NUMBER; i++) {
+            Population newPopulation = new Population(POPULATION_SIZE);
 
+            int numberOfIndividuals = 0;
+            while (numberOfIndividuals < POPULATION_SIZE) {
+                Route winner = population.selectRouteViaTournament();
+                if (shouldBeCrossovered() && numberOfIndividuals+2 < POPULATION_SIZE){
+                    Route winner2 = population.selectRouteViaTournament();
+                    Route[] childs = crossover(winner,winner2);
+                    newPopulation.setRoute(childs[0],numberOfIndividuals);
+                    newPopulation.setRoute(childs[1],numberOfIndividuals+1);
+                    numberOfIndividuals+=2;
+                }
+                else {
+                    if (shouldBeMutated()){
+                        mutate(winner);
+                    }
+                    newPopulation.setRoute(winner,numberOfIndividuals);
+                    numberOfIndividuals++;
+                }
+
+            }
+
+            population = newPopulation;
+            bests[i] = population.getBestDistance();
+            avgs[i] = population.getAverageDistance();
+            worsts[i] = population.getWorseDistance();
         }
     }
 
@@ -55,10 +69,12 @@ public class GeneticAlgorithm implements Algorithm {
     }
 
     public boolean shouldBeMutated() {
-        return Math.random() < mutationProbability;
+        return Math.random() < MUTATION_PROBABILITY;
     }
 
-
+    public boolean shouldBeCrossovered(){
+        return Math.random() < CROSSOVER_PROBABILTY;
+    }
 
     public Route[] crossover(Route parent1, Route parent2) {
         Route[] childs = new Route[2];
@@ -74,8 +90,6 @@ public class GeneticAlgorithm implements Algorithm {
             start = end;
             end = temp;
         }
-        System.out.println("Start : "+start);
-        System.out.println("End "+end);
         assert start <= end;
 
         //create childs

@@ -70,4 +70,8 @@ public class Population {
 
         return routes[bestIndex];
     }
+
+    public void setRoute(Route route, int index){
+        routes[index] = route;
+    }
 }

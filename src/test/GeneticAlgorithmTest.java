@@ -17,20 +17,17 @@ public class GeneticAlgorithmTest {
 
     @Test
     public void mutate() throws Exception {
-        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(1);
-        geneticAlgorithm.setMutationProbability(1);
+        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+        GeneticAlgorithm.MUTATION_PROBABILITY = 1;
 
         //prepare route
         City city1 = new City(0, 0);
         City city2 = new City(10, 10);
         City city3 = new City(20, 20);
         Route route = new Route(new City[]{city1, city2, city3});
-        System.out.println(route.toString());
 
         //mutate route with probability 1
         geneticAlgorithm.mutate(route);
-
-        System.out.println(route.toString());
 
         //assert that after mutations each city is still in the route
         assertTrue(route.contains(city1));
@@ -41,7 +38,8 @@ public class GeneticAlgorithmTest {
 
     @Test
     public void crossover() throws  Exception {
-        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(1);
+        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+        GeneticAlgorithm.MUTATION_PROBABILITY = 1;
 
         //prepare cities
         City city1 = new City(0, 0);
@@ -52,11 +50,13 @@ public class GeneticAlgorithmTest {
         //prepare routes
         Route route1 = new Route(new City[]{city1,city2,city3,city4}); //60
         Route route2 = new Route(new City[]{city4,city2,city1,city3}); //64,72
+
         System.out.println("Parents");
         System.out.println(route1.toString());
         System.out.println(route2.toString());
 
         Route[] childs = geneticAlgorithm.crossover(route1,route2);
+
         System.out.println("Childs");
         System.out.println(childs[0].toString());
         System.out.println(childs[1].toString());
