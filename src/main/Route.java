@@ -64,7 +64,7 @@ public class Route {
         }
     }
 
-    public int findFirstFreeIndex(int start) {
+    public int findFirstFreeIndex() {
         int index = -1;
         boolean founded = false;
 

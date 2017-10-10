@@ -17,9 +17,6 @@ public class GeneticAlgorithm {
     public static int TOURNAMENT_SIZE = 5;
 
 
-    public GeneticAlgorithm() {}
-
-
     public void ga(City[] cities) {
         Population population = new Population(cities.length);
         population.initializeRoutesInRandomOrder(cities);
@@ -30,56 +27,62 @@ public class GeneticAlgorithm {
             int numberOfIndividuals = 0;
             while (numberOfIndividuals < POPULATION_SIZE) {
                 Route winner = population.selectRouteViaTournament();
-                if (shouldBeCrossovered() && numberOfIndividuals+2 < POPULATION_SIZE){
+                if (shouldBeCrossovered() && numberOfIndividuals + 2 < POPULATION_SIZE) {
                     Route winner2 = population.selectRouteViaTournament();
-                    Route[] childs = crossover(winner,winner2);
-                    newPopulation.setRoute(childs[0],numberOfIndividuals);
-                    newPopulation.setRoute(childs[1],numberOfIndividuals+1);
-                    numberOfIndividuals+=2;
-                }
-                else {
-                    if (shouldBeMutated()){
+                    Route[] childs = crossover(winner, winner2);
+                    newPopulation.setRoute(childs[0], numberOfIndividuals);
+                    newPopulation.setRoute(childs[1], numberOfIndividuals + 1);
+
+                    numberOfIndividuals += 2;
+                } else {
+                    if (shouldBeMutated()) {
                         mutate(winner);
                     }
-                    newPopulation.setRoute(winner,numberOfIndividuals);
+                    newPopulation.setRoute(winner, numberOfIndividuals);
                     numberOfIndividuals++;
                 }
 
             }
 
             population = newPopulation;
-            bests[i] = population.getBestDistance();
-            avgs[i] = population.getAverageDistance();
-            worsts[i] = population.getWorseDistance();
+
+            savePopulationStatistics(population, i);
         }
+    }
+
+    private void savePopulationStatistics(Population population, int i) {
+        bests[i] = population.getBestDistance();
+        avgs[i] = population.getAverageDistance();
+        worsts[i] = population.getWorseDistance();
     }
 
     public void mutate(Route route) {
         for (int i = 0; i < route.length(); i++) {
             if (shouldBeMutated()) {
-                int secondPosition = randomWithRange(0, route.length() - 1);
-                City firstCity = route.getCityAtIndex(i);
-
-                //swap cities
-                route.setCity(route.getCityAtIndex(secondPosition), i);
-                route.setCity(firstCity, secondPosition);
+                swapCityFromIndexWithRandomAnother(route, i);
 
             }
         }
+    }
+
+    private void swapCityFromIndexWithRandomAnother(Route route, int firstCityIndex) {
+        City firstCity = route.getCityAtIndex(firstCityIndex);
+        int secondPosition = randomWithRange(0, route.length() - 1);
+
+        route.setCity(route.getCityAtIndex(secondPosition), firstCityIndex);
+        route.setCity(firstCity, secondPosition);
     }
 
     public boolean shouldBeMutated() {
         return Math.random() < MUTATION_PROBABILITY;
     }
 
-    public boolean shouldBeCrossovered(){
+    public boolean shouldBeCrossovered() {
         return Math.random() < CROSSOVER_PROBABILTY;
     }
 
     public Route[] crossover(Route parent1, Route parent2) {
         Route[] childs = new Route[2];
-        Route child1 = new Route(parent1.length());
-        Route child2 = new Route(parent1.length());
 
         int start = randomWithRange(0, parent1.length() - 1);
         int end = randomWithRange(0, parent1.length() - 1);
@@ -92,7 +95,15 @@ public class GeneticAlgorithm {
         }
         assert start <= end;
 
-        //create childs
+        childs = createChildsFromParents(parent1, parent2,start, end);
+
+        return childs;
+    }
+
+    private Route[] createChildsFromParents(Route parent1, Route parent2, int start, int end) {
+        Route child1 = new Route(parent1.length());
+        Route child2 = new Route(parent1.length());
+
         for (int i = 0; i < parent1.length(); i++) {
             if (i >= start && i <= end) {
                 child1.setCity(parent1.getCityAtIndex(i), i);
@@ -101,24 +112,20 @@ public class GeneticAlgorithm {
         }
         for (int j = 0; j < parent1.length(); j++) {
             if (!child1.contains(parent2.getCityAtIndex(j))) {
-                int firstFreeIndex = child1.findFirstFreeIndex(j);
+                int firstFreeIndex = child1.findFirstFreeIndex();
                 if (firstFreeIndex != -1) {
                     child1.setCity(parent2.getCityAtIndex(j), firstFreeIndex);
                 }
             }
             if (!child2.contains(parent1.getCityAtIndex(j))) {
-                int firstFreeIndex = child2.findFirstFreeIndex(j);
+                int firstFreeIndex = child2.findFirstFreeIndex();
                 if (firstFreeIndex != -1) {
                     child2.setCity(parent1.getCityAtIndex(j), firstFreeIndex);
                 }
             }
         }
 
-
-        childs[0] = child1;
-        childs[1] = child2;
-
-        return childs;
+        return new Route[]{child1,child2};
     }
 
 

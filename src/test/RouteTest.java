@@ -4,9 +4,6 @@ import main.City;
 import main.Route;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -60,7 +57,7 @@ public class RouteTest {
         route.setCity(city1,1);
         route.setCity(city2,2);
 
-        int index = route.findFirstFreeIndex(0);
+        int index = route.findFirstFreeIndex();
 
         assertEquals(0,index);
     }
@@ -72,7 +69,7 @@ public class RouteTest {
         City city3 = new City(20, 20);
         Route route = new Route(new City[]{city1, city2, city3});
 
-        int index = route.findFirstFreeIndex(0);
+        int index = route.findFirstFreeIndex();
 
         assertEquals(-1,index);
     }
@@ -86,7 +83,7 @@ public class RouteTest {
         route.setCity(city1,0);
         route.setCity(city2,1);
 
-        int index = route.findFirstFreeIndex(0);
+        int index = route.findFirstFreeIndex();
 
         assertEquals(1,index);
     }
@@ -100,7 +97,7 @@ public class RouteTest {
         route.setCity(city1,0);
         route.setCity(city2,2);
 
-        int index = route.findFirstFreeIndex(0);
+        int index = route.findFirstFreeIndex();
 
         assertEquals(1,index);
     }
