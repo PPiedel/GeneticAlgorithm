@@ -8,12 +8,25 @@ import java.util.Random;
 public class Route {
     private City[] cities;
 
+    public Route() {
+    }
+
     public Route(City[] cities) {
-        this.cities = cities;
+        this.cities = new City[cities.length];
+
+        System.arraycopy(cities, 0, this.cities, 0, cities.length);
     }
 
     public Route(int length) {
         cities = new City[length];
+    }
+
+    public City[] getCities() {
+        return cities;
+    }
+
+    public double getFitness(){
+        return 1/getTotalDistance(); //the shorter distnace the highier fitness
     }
 
     public double getTotalDistance() {
@@ -58,9 +71,9 @@ public class Route {
         for (int i = cities.length - 1; i > 0; i--) {
             int index = rnd.nextInt(i + 1);
             // Simple swap
-            City a = cities[index];
+            City tempCopy = cities[index];
             cities[index] = cities[i];
-            cities[i] = a;
+            cities[i] = tempCopy;
         }
     }
 

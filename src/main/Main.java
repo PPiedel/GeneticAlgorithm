@@ -7,9 +7,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static main.GeneticAlgorithm.*;
 
@@ -27,13 +24,18 @@ public class Main extends Application {
         City city4 = new City(10,0);
         City city5 = new City(20,20);
         City city6 = new City(25,15);
+        City city7 = new City(28,35);
+        City city8 = new City(34,28);
+        City city9 = new City(42,34);
 
 
-        City[] cities = new City[]{city1,city2,city3,city4,city5,city6};
+        City[] cities = new City[]{city1,city2,city3,city4,city5,city6,city7,city8,city9};
 
         geneticAlgorithm.ga(cities);
 
         System.out.println("Final distance : "+bests[GENERATIONS_NUMBER-1]);
+
+        System.out.println("Final route : "+geneticAlgorithm.getFinalRoute().toString());
 
         launch(args);
 

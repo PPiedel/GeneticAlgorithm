@@ -1,7 +1,6 @@
 package main;
 
-import java.util.List;
-
+import static main.GeneticAlgorithm.POPULATION_SIZE;
 import static main.GeneticAlgorithm.TOURNAMENT_SIZE;
 import static main.Util.randomWithRange;
 
@@ -11,12 +10,17 @@ import static main.Util.randomWithRange;
 public class Population {
     private Route[] routes;
 
+
     public Population(int populationSize) {
         routes = new Route[populationSize];
     }
 
     public Population(Route[] routes) {
         this.routes = routes;
+    }
+
+    public Route[] getRoutes() {
+        return routes;
     }
 
     public double getBestDistance() {
@@ -27,6 +31,18 @@ public class Population {
             }
         }
         return bestDistance;
+    }
+
+
+    public Route getBestRoute(){
+        int bestIndex = 0;
+        double bestDistance = getBestDistance();
+        for (int i=0; i<routes.length; i++){
+            if (routes[i].getTotalDistance() == bestDistance){
+                bestIndex = i;
+            }
+        }
+        return routes[bestIndex];
     }
 
     public double getAverageDistance() {
@@ -49,11 +65,12 @@ public class Population {
     }
 
     public void initializeRoutesInRandomOrder(City[] cities) {
-        for (int i = 0; i < routes.length; i++) {
+        for (int i = 0; i < POPULATION_SIZE; i++) {
             Route randomRoute = new Route(cities);
             randomRoute.shuffleCities();
 
             routes[i] = randomRoute;
+            //System.out.println(""+randomRoute.toString());
         }
     }
 

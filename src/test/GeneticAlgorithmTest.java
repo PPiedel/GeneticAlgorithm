@@ -2,11 +2,8 @@ package test;
 
 import main.City;
 import main.GeneticAlgorithm;
-import main.Population;
 import main.Route;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,8 +23,8 @@ public class GeneticAlgorithmTest {
         City city3 = new City(20, 20);
         Route route = new Route(new City[]{city1, city2, city3});
 
-        //mutate route with probability 1
-        geneticAlgorithm.mutate(route);
+        //scrambleMutate route with probability 1
+        geneticAlgorithm.scrambleMutate(route);
 
         //assert that after mutations each city is still in the route
         assertTrue(route.contains(city1));

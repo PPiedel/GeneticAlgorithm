@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static main.GeneticAlgorithm.TOURNAMENT_SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -84,6 +85,8 @@ public class PopulationTest {
 
     @Test
     public void selectRouteViaTournament() throws Exception {
+        TOURNAMENT_SIZE = 100;
+
         //prepare cities
         City city1 = new City(0, 0);
         City city2 = new City(0,20);
@@ -93,10 +96,12 @@ public class PopulationTest {
         //prepare routes
         Route route1 = new Route(new City[]{city1,city2,city3,city4});
         Route route2 = new Route(new City[]{city1,city3,city2,city4});
-        Route route3 = new Route(new City[]{city4,city2,city3,city1});
+
+        System.out.println(""+route1.getTotalDistance());
+        System.out.println(""+route2.getTotalDistance());
 
         //create population
-        Population population = new Population(new Route[]{route1,route2,route3});
+        Population population = new Population(new Route[]{route1,route2});
 
         Route winner = population.selectRouteViaTournament();
 
