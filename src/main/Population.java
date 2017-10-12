@@ -75,12 +75,13 @@ public class Population {
 
     public Route selectRouteViaTournament(){
         int bestIndex = Integer.MAX_VALUE;
-        int bestValue = Integer.MAX_VALUE;
+        double bestValue = Integer.MAX_VALUE;
 
         for (int i=0; i< TOURNAMENT_SIZE; i++){
             int index = randomWithRange(0,routes.length-1);
             if (routes[index].getTotalDistance() < bestValue){
                 bestIndex = index;
+                bestValue = routes[index].getTotalDistance();
             }
         }
 

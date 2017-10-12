@@ -2,6 +2,7 @@ package test;
 
 import main.City;
 import main.GeneticAlgorithm;
+import main.Population;
 import main.Route;
 import org.junit.jupiter.api.Test;
 
@@ -81,6 +82,12 @@ public class GeneticAlgorithmTest {
         //prepare routes
         Route route1 = new Route(new City[]{city1,city2,city3,city4}); //60
         Route route2 = new Route(new City[]{city4,city2,city1,city3}); //64,72
+
+        Population population = new Population(new Route[]{route1,route2});
+
+        Route bestRoute = population.selectRouteViaTournament();
+
+        assert bestRoute.equals(route1);
     }
 
 }
