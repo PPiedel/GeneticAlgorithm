@@ -1,5 +1,6 @@
-package main;
+package test;
 
+import main.Util;
 import org.junit.jupiter.api.Test;
 
 

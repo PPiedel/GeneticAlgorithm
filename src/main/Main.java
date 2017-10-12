@@ -14,22 +14,12 @@ import static main.GeneticAlgorithm.*;
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class Main extends Application {
+    public static final String FILE_PATH = "E:\\Studia\\Metaheurystyki\\tsp_data\\burma14.tsp";
+
     public static void main(String[] args) {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
-        //prepare test cities
-        City city1 = new City(0, 0);
-        City city2 = new City(0,20);
-        City city3 = new City(10, 20);
-        City city4 = new City(10,0);
-        City city5 = new City(20,20);
-        City city6 = new City(25,15);
-        City city7 = new City(28,35);
-        City city8 = new City(34,28);
-        City city9 = new City(42,34);
-
-
-        City[] cities = new City[]{city1,city2,city3,city4,city5,city6,city7,city8,city9};
+        City[] cities = Util.openCities(FILE_PATH);
 
         geneticAlgorithm.ga(cities);
 

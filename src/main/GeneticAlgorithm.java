@@ -8,36 +8,31 @@ import static main.Util.randomWithRange;
 public class GeneticAlgorithm implements Algorithm {
     private Route finalRoute;
 
-    public static int POPULATION_SIZE = 200;
+    //params
+    public static int POPULATION_SIZE = 100;
     public static int GENERATIONS_NUMBER = 100;
+    public static double MUTATION_PROBABILITY = 0.01;
+    public static double CROSSOVER_PROBABILTY = 0.8;
+    public static int TOURNAMENT_SIZE = 4;
+
+    //stats
     public static double[] bests = new double[GENERATIONS_NUMBER];
     public static double[] avgs = new double[GENERATIONS_NUMBER];
     public static double[] worsts = new double[GENERATIONS_NUMBER];
-    public static double MUTATION_PROBABILITY = 0.1;
-    public static double CROSSOVER_PROBABILTY = 0.8;
-    public static int TOURNAMENT_SIZE = 4;
 
 
     public void ga(City[] cities) {
         Population population = new Population(POPULATION_SIZE);
         population.initializeRoutesInRandomOrder(cities);
 
-
-        for (int i = 0; i < GENERATIONS_NUMBER; i++) {
+        for (int generationNumber = 0; generationNumber < GENERATIONS_NUMBER; generationNumber++) {
             population = evolveIntoNewPopulation(population);
-            //population = evolveIntoNewPopulationWithRouletteSelection(population);
-            savePopulationStatistics(population, i);
+            savePopulationStatistics(population, generationNumber);
         }
     }
 
 
     private Population evolveIntoNewPopulation(Population population) {
-        /*System.out.println("POPULATION");
-        for (Route route : population.getRoutes()) {
-            System.out.println("" + route.getTotalDistance());
-        }
-        System.out.println("\n\n");*/
-
         Population newPopulation = new Population(POPULATION_SIZE);
         int numberOfIndividuals = 0;
         while (numberOfIndividuals < POPULATION_SIZE) {
@@ -88,16 +83,18 @@ public class GeneticAlgorithm implements Algorithm {
     public void inverseMutate(Route route) {
         //treat route as a whole
         if (shouldBeMutated()) {
-            int start = randomWithRange(0, route.length() - 1);
-            int end = randomWithRange(0, route.length() - 1);
+            inverseCitiesBetweenRandomTwoPoints(route);
+        }
+    }
 
-            for (int i = start; i < end / 2; i++) {
-                City temp = route.getCities()[i];
-                route.setCity(route.getCities()[route.getCities().length - i - 1], i);
-                route.setCity(temp, route.getCities().length - i - 1);
-            }
+    private void inverseCitiesBetweenRandomTwoPoints(Route route) {
+        int start = randomWithRange(0, route.length() - 1);
+        int end = randomWithRange(0, route.length() - 1);
 
-
+        for (int i = start; i < end / 2; i++) {
+            City temp = route.getCities()[i];
+            route.setCity(route.getCities()[route.getCities().length - i - 1], i);
+            route.setCity(temp, route.getCities().length - i - 1);
         }
     }
 
@@ -160,57 +157,21 @@ public class GeneticAlgorithm implements Algorithm {
         return new Route[]{child1, child2};
     }
 
-    private Population evolveIntoNewPopulationWithRouletteSelection(Population population) {
-        Population newPopulation = new Population(POPULATION_SIZE);
-
-        double sumOfFitness = 0;
-        for (Route route : population.getRoutes()) {
-            sumOfFitness += route.getFitness();
-        }
-
-        System.out.println("POPULATION");
-        for (Route route : population.getRoutes()) {
-            System.out.println("" + route.getTotalDistance());
-        }
-        System.out.println();
-        System.out.println();
-
+    private double[] calculateProbabilities(Population population, double sumOfFitness) {
         double[] probabilities = new double[population.getRoutes().length];
         for (int i = 0; i < probabilities.length; i++) {
             double fitness = population.getRoutes()[i].getFitness();
             probabilities[i] = fitness / sumOfFitness;
         }
+        return probabilities;
+    }
 
-        int numberOfIndividuals = 0;
-        while (numberOfIndividuals < POPULATION_SIZE) {
-            Route winner = selectNewRoute(population, probabilities);
-            assert winner != null;
-
-            if (shouldBeCrossovered() && numberOfIndividuals + 2 < POPULATION_SIZE) {
-                Route winner2 = selectNewRoute(population, probabilities);
-                assert winner2 != null;
-
-                Route[] childs = crossover(winner, winner2);
-                scrambleMutate(childs[0]);
-                scrambleMutate(childs[1]);
-                //inverseMutate(childs[0]);
-                //inverseMutate(childs[1]);
-
-                newPopulation.setRoute(childs[0], numberOfIndividuals);
-                newPopulation.setRoute(childs[1], numberOfIndividuals + 1);
-
-                numberOfIndividuals += 2;
-
-            } else {
-                scrambleMutate(winner);
-                //inverseMutate(winner);
-
-                newPopulation.setRoute(winner, numberOfIndividuals);
-                numberOfIndividuals++;
-            }
-
+    private double calculateSumOfFitness(Population population) {
+        double sumOfFitness = 0;
+        for (Route route : population.getRoutes()) {
+            sumOfFitness += route.getFitness();
         }
-        return newPopulation;
+        return sumOfFitness;
     }
 
     private Route selectNewRoute(Population population, double[] probabilities) {

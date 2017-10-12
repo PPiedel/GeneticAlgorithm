@@ -1,35 +1,39 @@
 package main;
 
+import javax.annotation.Generated;
+
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class City {
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    public City(int x, int y) {
+    public City(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
+
     public double distanceTo(City city) {
-        return Math.sqrt((x - city.getX()) * (x - city.getX()) + (y - city.getY()) * (y - city.getY()));
+        //sqrt removed
+        return (x - city.getX()) * (x - city.getX()) + (y - city.getY()) * (y - city.getY());
     }
 
     @Override
@@ -39,14 +43,18 @@ public class City {
 
         City city = (City) o;
 
-        if (x != city.x) return false;
-        return y == city.y;
+        if (Double.compare(city.x, x) != 0) return false;
+        return Double.compare(city.y, y) == 0;
     }
 
     @Override
     public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(x);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
