@@ -70,7 +70,6 @@ public class Population {
             randomRoute.shuffleCities();
 
             routes[i] = randomRoute;
-            //System.out.println(""+randomRoute.toString());
         }
     }
 

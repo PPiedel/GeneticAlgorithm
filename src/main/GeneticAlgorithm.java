@@ -12,8 +12,8 @@ public class GeneticAlgorithm implements Algorithm {
     public static int POPULATION_SIZE = 100;
     public static int GENERATIONS_NUMBER = 100;
     public static double MUTATION_PROBABILITY = 0.01;
-    public static double CROSSOVER_PROBABILTY = 0.8;
-    public static int TOURNAMENT_SIZE = 4;
+    public static double CROSSOVER_PROBABILTY = 0.5;
+    public static int TOURNAMENT_SIZE = 3;
 
     //stats
     public static double[] bests = new double[GENERATIONS_NUMBER];
@@ -44,8 +44,6 @@ public class GeneticAlgorithm implements Algorithm {
                 Route[] childs = crossover(winner, winner2);
                 scrambleMutate(childs[0]);
                 scrambleMutate(childs[1]);
-                //inverseMutate(childs[0]);
-                //inverseMutate(childs[1]);
 
                 newPopulation.setRoute(childs[0], numberOfIndividuals);
                 newPopulation.setRoute(childs[1], numberOfIndividuals + 1);
@@ -53,7 +51,6 @@ public class GeneticAlgorithm implements Algorithm {
                 numberOfIndividuals += 2;
             } else {
                 scrambleMutate(winner);
-                // inverseMutate(winner);
 
                 newPopulation.setRoute(winner, numberOfIndividuals);
                 numberOfIndividuals++;
@@ -77,24 +74,6 @@ public class GeneticAlgorithm implements Algorithm {
             if (shouldBeMutated()) {
                 swapCityAtGivenIndexWithRandomAnotherCity(route, i);
             }
-        }
-    }
-
-    public void inverseMutate(Route route) {
-        //treat route as a whole
-        if (shouldBeMutated()) {
-            inverseCitiesBetweenRandomTwoPoints(route);
-        }
-    }
-
-    private void inverseCitiesBetweenRandomTwoPoints(Route route) {
-        int start = randomWithRange(0, route.length() - 1);
-        int end = randomWithRange(0, route.length() - 1);
-
-        for (int i = start; i < end / 2; i++) {
-            City temp = route.getCities()[i];
-            route.setCity(route.getCities()[route.getCities().length - i - 1], i);
-            route.setCity(temp, route.getCities().length - i - 1);
         }
     }
 
@@ -155,46 +134,6 @@ public class GeneticAlgorithm implements Algorithm {
         }
 
         return new Route[]{child1, child2};
-    }
-
-    private double[] calculateProbabilities(Population population, double sumOfFitness) {
-        double[] probabilities = new double[population.getRoutes().length];
-        for (int i = 0; i < probabilities.length; i++) {
-            double fitness = population.getRoutes()[i].getFitness();
-            probabilities[i] = fitness / sumOfFitness;
-        }
-        return probabilities;
-    }
-
-    private double calculateSumOfFitness(Population population) {
-        double sumOfFitness = 0;
-        for (Route route : population.getRoutes()) {
-            sumOfFitness += route.getFitness();
-        }
-        return sumOfFitness;
-    }
-
-    private Route selectNewRoute(Population population, double[] probabilities) {
-        double number = Math.random();
-        Route route = population.getRoutes()[0];
-        for (int i = 0; i < population.getRoutes().length; i++) {
-            if (number > probabilities[i] && number < nextProbability(probabilities[i], probabilities)) {
-                route = population.getRoutes()[i];
-            }
-        }
-        return route;
-    }
-
-    private double nextProbability(double probability, double[] probabilities) {
-        double nextProbability = 1.0;
-        boolean found = false;
-        for (int i = 0; i < probabilities.length && !found; i++) {
-            if (probabilities[i] > probability) {
-                found = true;
-                nextProbability = probabilities[i];
-            }
-        }
-        return nextProbability;
     }
 
     @Override

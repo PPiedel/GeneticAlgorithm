@@ -70,4 +70,17 @@ public class GeneticAlgorithmTest {
 
     }
 
+    @Test
+    public void selectRouteViaTournament() throws Exception {
+        //prepare cities
+        City city1 = new City(0, 0);
+        City city2 = new City(0,20);
+        City city3 = new City(10, 20);
+        City city4 = new City(10,0);
+
+        //prepare routes
+        Route route1 = new Route(new City[]{city1,city2,city3,city4}); //60
+        Route route2 = new Route(new City[]{city4,city2,city1,city3}); //64,72
+    }
+
 }
