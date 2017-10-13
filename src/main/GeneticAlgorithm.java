@@ -6,20 +6,19 @@ import static main.Util.randomWithRange;
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class GeneticAlgorithm implements Algorithm {
-    private Route finalRoute;
 
     //params
-    public static int POPULATION_SIZE = 100;
+    public static int POPULATION_SIZE = 200;
     public static int GENERATIONS_NUMBER = 100;
-    public static double MUTATION_PROBABILITY = 0.01;
-    public static double CROSSOVER_PROBABILTY = 0.5;
-    public static int TOURNAMENT_SIZE = 3;
+    public static double MUTATION_PROBABILITY = 0.02;
+    public static double CROSSOVER_PROBABILTY = 0.6;
+    public static int TOURNAMENT_SIZE = 15;
 
     //stats
     public static double[] bests = new double[GENERATIONS_NUMBER];
     public static double[] avgs = new double[GENERATIONS_NUMBER];
     public static double[] worsts = new double[GENERATIONS_NUMBER];
-
+    public static Route finalRoute;
 
     public void ga(City[] cities) {
         Population population = new Population(POPULATION_SIZE);
@@ -42,15 +41,15 @@ public class GeneticAlgorithm implements Algorithm {
             if (shouldBeCrossovered() && numberOfIndividuals + 2 < POPULATION_SIZE) {
                 Route winner2 = population.selectRouteViaTournament();
                 Route[] childs = crossover(winner, winner2);
-                scrambleMutate(childs[0]);
-                scrambleMutate(childs[1]);
+                mutation(childs[0], MutationType.SCRAMBLE_MUTATION);
+                mutation(childs[1], MutationType.SCRAMBLE_MUTATION);
 
                 newPopulation.setRoute(childs[0], numberOfIndividuals);
                 newPopulation.setRoute(childs[1], numberOfIndividuals + 1);
 
                 numberOfIndividuals += 2;
             } else {
-                scrambleMutate(winner);
+                mutation(winner, MutationType.SCRAMBLE_MUTATION);
 
                 newPopulation.setRoute(winner, numberOfIndividuals);
                 numberOfIndividuals++;
@@ -61,6 +60,7 @@ public class GeneticAlgorithm implements Algorithm {
         return newPopulation;
     }
 
+
     private void savePopulationStatistics(Population population, int i) {
         bests[i] = population.getBestDistance();
         avgs[i] = population.getAverageDistance();
@@ -69,12 +69,19 @@ public class GeneticAlgorithm implements Algorithm {
         finalRoute = population.getBestRoute();
     }
 
-    public void scrambleMutate(Route route) {
-        for (int i = 0; i < route.length(); i++) {
-            if (shouldBeMutated()) {
-                swapCityAtGivenIndexWithRandomAnotherCity(route, i);
-            }
+    public void mutation(Route route, MutationType type) {
+        switch (type) {
+            case SCRAMBLE_MUTATION:
+                for (int i = 0; i < route.length(); i++) {
+                    if (shouldBeMutated()) {
+                        swapCityAtGivenIndexWithRandomAnotherCity(route, i);
+                    }
+                }
+                break;
+            case INVERSE_MUTATION:
+                break;
         }
+
     }
 
     private void swapCityAtGivenIndexWithRandomAnotherCity(Route route, int firstCityIndex) {
@@ -107,6 +114,7 @@ public class GeneticAlgorithm implements Algorithm {
 
         return createChildsFromParents(parent1, parent2, start, end);
     }
+
 
     private Route[] createChildsFromParents(Route parent1, Route parent2, int start, int end) {
         Route child1 = new Route(parent1.length());

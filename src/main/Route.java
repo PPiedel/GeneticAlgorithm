@@ -25,10 +25,6 @@ public class Route {
         return cities;
     }
 
-    public double getFitness(){
-        return 1/getTotalDistance(); //the shorter distnace the highier fitness
-    }
-
     public double getTotalDistance() {
         double totalDistance = 0;
 
@@ -36,6 +32,7 @@ public class Route {
             if (i + 1 < cities.length) {
                 totalDistance += cities[i].distanceTo(cities[i + 1]);
             } else {
+                //close the circle
                 totalDistance += cities[i].distanceTo(cities[0]);
             }
         }
@@ -56,10 +53,9 @@ public class Route {
     }
 
     public boolean contains(City city) {
-        assert city !=null;
         boolean contains = false;
-        for (int i=0; i<cities.length; i++){
-            if (cities[i] !=null && cities[i].equals(city)){
+        for (int i = 0; i < cities.length; i++) {
+            if (cities[i] != null && cities[i].equals(city)) {
                 contains = true;
             }
         }
@@ -91,12 +87,11 @@ public class Route {
         return index;
     }
 
-
     @Override
     public String toString() {
         String string = "";
         for (City city : cities) {
-            if (city!=null){
+            if (city != null) {
                 string += city.toString() + " ";
             }
         }

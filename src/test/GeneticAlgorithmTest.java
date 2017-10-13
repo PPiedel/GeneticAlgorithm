@@ -24,8 +24,8 @@ public class GeneticAlgorithmTest {
         City city3 = new City(20, 20);
         Route route = new Route(new City[]{city1, city2, city3});
 
-        //scrambleMutate route with probability 1
-        geneticAlgorithm.scrambleMutate(route);
+        //mutation route with probability 1
+        geneticAlgorithm.mutation(route);
 
         //assert that after mutations each city is still in the route
         assertTrue(route.contains(city1));

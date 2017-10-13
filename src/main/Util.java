@@ -24,10 +24,6 @@ public class Util {
 
             while ((text = reader.readLine()) != null && !text.equals("EOF")) {
                 String[] parts = text.split(" +");
-                for (String part : parts){
-                    System.out.print(part+" ");
-                }
-                System.out.println();
 
                 list.add(new City(Double.parseDouble(parts[1]),Double.parseDouble(parts[2])));
             }

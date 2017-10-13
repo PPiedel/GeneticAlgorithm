@@ -33,7 +33,7 @@ public class City {
 
     public double distanceTo(City city) {
         //sqrt removed
-        return (x - city.getX()) * (x - city.getX()) + (y - city.getY()) * (y - city.getY());
+        return Math.sqrt((x - city.getX()) * (x - city.getX()) + (y - city.getY()) * (y - city.getY()));
     }
 
     @Override
