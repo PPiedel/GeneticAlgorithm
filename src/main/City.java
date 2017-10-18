@@ -18,21 +18,11 @@ public class City {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
     public double getY() {
         return y;
     }
 
-    public void setY(double y) {
-        this.y = y;
-    }
-
-
     public double distanceTo(City city) {
-        //sqrt removed
         return Math.sqrt((x - city.getX()) * (x - city.getX()) + (y - city.getY()) * (y - city.getY()));
     }
 

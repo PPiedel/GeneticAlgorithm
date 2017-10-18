@@ -15,19 +15,45 @@ import static main.GeneticAlgorithm.*;
  */
 public class Main extends Application {
     public static final String FILE_PATH = "E:\\Studia\\Metaheurystyki\\tsp_data\\kroA100.tsp";
+    public static final boolean ELITISM = true;
 
     public static void main(String[] args) {
+
+        //calculateBestParams(true);
+
+
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
         City[] cities = Util.openCities(FILE_PATH);
 
-        geneticAlgorithm.ga(cities);
+        geneticAlgorithm.ga(cities,ELITISM);
 
         System.out.println("Final distance : "+bests[GENERATIONS_NUMBER-1]);
 
         System.out.println("Final route : "+geneticAlgorithm.getFinalRoute().toString());
 
-        launch(args);
+        //launch(args);
+    }
+
+    private static void calculateBestParams(boolean elitism) {
+        double bestDistance = Double.MAX_VALUE;
+        City[] cities = Util.openCities(FILE_PATH);
+        for (int tournamentSize = 1; tournamentSize < 20 ;tournamentSize++){
+            for (double mutationProbability = 0.01; mutationProbability < 0.03; mutationProbability+=0.01){
+                for (double crossoverProbability = 0.4; crossoverProbability < 0.6; crossoverProbability+=0.1){
+                    GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+                    geneticAlgorithm.ga(cities,elitism);
+
+                    if (geneticAlgorithm.getFinalRoute().getTotalDistance() < bestDistance){
+                        System.out.println("Tournament size : "+tournamentSize);
+                        System.out.println("Mutation probability : "+mutationProbability);
+                        System.out.println("Crossover probability : "+crossoverProbability);
+                        bestDistance = geneticAlgorithm.getFinalRoute().getTotalDistance();
+                    }
+
+                }
+            }
+        }
     }
 
     @Override

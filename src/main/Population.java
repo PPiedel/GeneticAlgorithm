@@ -19,10 +19,6 @@ public class Population {
         this.routes = routes;
     }
 
-    public Route[] getRoutes() {
-        return routes;
-    }
-
     public double getBestDistance() {
         double bestDistance = Integer.MAX_VALUE;
         for (Route route : routes) {

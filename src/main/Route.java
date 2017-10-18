@@ -54,7 +54,7 @@ public class Route {
 
     public boolean contains(City city) {
         boolean contains = false;
-        for (int i = 0; i < cities.length; i++) {
+        for (int i = 0; i < cities.length && !contains; i++) {
             if (cities[i] != null && cities[i].equals(city)) {
                 contains = true;
             }

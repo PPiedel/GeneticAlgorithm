@@ -1,11 +1,9 @@
 package test;
 
-import main.City;
-import main.GeneticAlgorithm;
-import main.Population;
-import main.Route;
+import main.*;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -25,7 +23,7 @@ public class GeneticAlgorithmTest {
         Route route = new Route(new City[]{city1, city2, city3});
 
         //mutation route with probability 1
-        geneticAlgorithm.mutation(route);
+        geneticAlgorithm.mutation(route, MutationType.SCRAMBLE_MUTATION);
 
         //assert that after mutations each city is still in the route
         assertTrue(route.contains(city1));
@@ -44,10 +42,11 @@ public class GeneticAlgorithmTest {
         City city2 = new City(0,20);
         City city3 = new City(10, 20);
         City city4 = new City(10,0);
+        City city5 = new City(10,35);
 
         //prepare routes
-        Route route1 = new Route(new City[]{city1,city2,city3,city4}); //60
-        Route route2 = new Route(new City[]{city4,city2,city1,city3}); //64,72
+        Route route1 = new Route(new City[]{city1,city2,city3,city4,city5}); //60
+        Route route2 = new Route(new City[]{city3,city4,city1,city2,city5}); //64,72
 
         System.out.println("Parents");
         System.out.println(route1.toString());
@@ -88,6 +87,22 @@ public class GeneticAlgorithmTest {
         Route bestRoute = population.selectRouteViaTournament();
 
         assert bestRoute.equals(route1);
+    }
+
+    @Test
+    public void calculateDistancesBetweenCities() throws Exception {
+        //prepare cities
+        City city1 = new City(0, 0);
+        City city2 = new City(20,20);
+        City[] cities = new City[]{city1,city2};
+
+        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+        double[][] distances = geneticAlgorithm.calculateDistancesBetweenCities(cities);
+
+        assertEquals(0,distances[0][0]);
+        assertEquals(28.284271247461902,distances[0][1]);
+        assertEquals(0,distances[1][1]);
+        assertEquals(28.284271247461902,distances[1][0]);
     }
 
 }
