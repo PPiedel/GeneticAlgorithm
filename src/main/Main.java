@@ -14,7 +14,9 @@ import static main.GeneticAlgorithm.*;
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class Main extends Application {
-    public static final String FILE_PATH = "E:\\Studia\\Metaheurystyki\\tsp_data\\kroA100.tsp";
+    public static final String FILE_PATH = "tsp_data/kroA100.tsp";
+    public static final String SCND_FILE_PATH = "tsp_data/kroB100.tsp";
+
     public static final boolean ELITISM = true;
 
     public static void main(String[] args) {

@@ -9,7 +9,7 @@ public class GeneticAlgorithm implements Algorithm {
 
     //params
     public static int POPULATION_SIZE = 100;
-    public static int GENERATIONS_NUMBER = 2000;
+    public static int GENERATIONS_NUMBER = 200;
 
     public static double MUTATION_PROBABILITY = 0.01;
     public static double CROSSOVER_PROBABILTY = 0.5;
