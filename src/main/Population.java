@@ -75,6 +75,7 @@ public class Population {
 
         for (int i=0; i< TOURNAMENT_SIZE; i++){
             int index = randomWithRange(0,routes.length-1);
+
             if (routes[index].getTotalDistance() < bestValue){
                 bestIndex = index;
                 bestValue = routes[index].getTotalDistance();

@@ -1,19 +1,22 @@
 package main;
 
+import main.mutation.Mutation;
+import main.mutation.MutationFactory;
+import main.mutation.MutationType;
+
 import static main.Util.randomWithRange;
 
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class GeneticAlgorithm implements Algorithm {
-
     //params
     public static int POPULATION_SIZE = 100;
-    public static int GENERATIONS_NUMBER = 200;
-
-    public static double MUTATION_PROBABILITY = 0.01;
+    public static int GENERATIONS_NUMBER = 800;
+    public static double MUTATION_PROBABILITY = 0.009;
     public static double CROSSOVER_PROBABILTY = 0.5;
     public static int TOURNAMENT_SIZE = 15;
+    public static final boolean ELITISM = false;
 
     //stats
     public static double[] bests = new double[GENERATIONS_NUMBER];
@@ -22,13 +25,12 @@ public class GeneticAlgorithm implements Algorithm {
     public static Route finalRoute;
 
 
-    public void ga(City[] cities, boolean elitism) {
-
+    public void ga(City[] cities) {
         Population population = new Population(POPULATION_SIZE);
         population.initializeRoutesInRandomOrder(cities);
 
         for (int generationNumber = 0; generationNumber < GENERATIONS_NUMBER; generationNumber++) {
-            population = evolveIntoNewPopulation(population, elitism);
+            population = evolveIntoNewPopulation(population, ELITISM);
             savePopulationStatistics(population, generationNumber);
         }
     }
@@ -42,7 +44,6 @@ public class GeneticAlgorithm implements Algorithm {
             numberOfIndividuals++;
         }
 
-
         while (numberOfIndividuals < POPULATION_SIZE) {
 
             Route winner = population.selectRouteViaTournament();
@@ -50,15 +51,22 @@ public class GeneticAlgorithm implements Algorithm {
             if (shouldBeCrossovered() && numberOfIndividuals + 2 < POPULATION_SIZE) {
                 Route winner2 = population.selectRouteViaTournament();
                 Route[] childs = crossover(winner, winner2);
-                mutation(childs[0], MutationType.SCRAMBLE_MUTATION);
-                mutation(childs[1], MutationType.SCRAMBLE_MUTATION);
+
+                MutationFactory mutationFactory = new MutationFactory();
+                Mutation mutation = mutationFactory.createMutation(MutationType.SCRAMBLE_MUTATION);
+                mutation.mutate(childs[0]);
+                mutation.mutate(childs[1]);
+
+               // mutation(childs[0], MutationType.SCRAMBLE_MUTATION);
+                //mutation(childs[1], MutationType.SCRAMBLE_MUTATION);
 
                 newPopulation.setRoute(childs[0], numberOfIndividuals);
                 newPopulation.setRoute(childs[1], numberOfIndividuals + 1);
 
                 numberOfIndividuals += 2;
             } else {
-                mutation(winner, MutationType.SCRAMBLE_MUTATION);
+
+                //mutation(winner, MutationType.SCRAMBLE_MUTATION);
 
                 newPopulation.setRoute(winner, numberOfIndividuals);
                 numberOfIndividuals++;
@@ -147,6 +155,24 @@ public class GeneticAlgorithm implements Algorithm {
 
         return new Route[]{child1, child2};
     }
+
+    /*public void paes(City[] cities, int archiveSize) {
+        Set<Route> archive = new HashSet<>();
+        Route solution = new Route(cities);
+        solution.shuffleCities();
+
+        Route candidate;
+
+        for (int generationNumber = 0; generationNumber < GENERATIONS_NUMBER; generationNumber++) {
+            candidate = new Route(solution.getCities());
+            mutation(candidate,MutationType.SCRAMBLE_MUTATION);
+
+            if (solution.dominates(candidate)){
+
+            }
+        }
+
+    }*/
 
     public double[][] calculateDistancesBetweenCities(City[] cities) {
         double[][] distances = new double[cities.length][cities.length];

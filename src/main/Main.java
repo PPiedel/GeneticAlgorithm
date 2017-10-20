@@ -8,6 +8,9 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
 
+import java.util.Arrays;
+
+import static java.util.Arrays.stream;
 import static main.GeneticAlgorithm.*;
 
 /**
@@ -17,34 +20,32 @@ public class Main extends Application {
     public static final String FILE_PATH = "tsp_data/kroA100.tsp";
     public static final String SCND_FILE_PATH = "tsp_data/kroB100.tsp";
 
-    public static final boolean ELITISM = true;
+
 
     public static void main(String[] args) {
 
-        //calculateBestParams(true);
-
-
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
-        City[] cities = Util.openCities(FILE_PATH);
+        City[] cities = Util.openCities(FILE_PATH,SCND_FILE_PATH);
+        //stream(cities).forEach(System.out::println);
 
-        geneticAlgorithm.ga(cities,ELITISM);
+        geneticAlgorithm.ga(cities);
 
         System.out.println("Final distance : "+bests[GENERATIONS_NUMBER-1]);
 
         System.out.println("Final route : "+geneticAlgorithm.getFinalRoute().toString());
 
-        //launch(args);
+        launch(args);
     }
 
     private static void calculateBestParams(boolean elitism) {
         double bestDistance = Double.MAX_VALUE;
-        City[] cities = Util.openCities(FILE_PATH);
+        City[] cities = Util.openCities(FILE_PATH,SCND_FILE_PATH);
         for (int tournamentSize = 1; tournamentSize < 20 ;tournamentSize++){
             for (double mutationProbability = 0.01; mutationProbability < 0.03; mutationProbability+=0.01){
                 for (double crossoverProbability = 0.4; crossoverProbability < 0.6; crossoverProbability+=0.1){
                     GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-                    geneticAlgorithm.ga(cities,elitism);
+                    geneticAlgorithm.ga(cities);
 
                     if (geneticAlgorithm.getFinalRoute().getTotalDistance() < bestDistance){
                         System.out.println("Tournament size : "+tournamentSize);

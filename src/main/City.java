@@ -1,17 +1,32 @@
 package main;
 
-import javax.annotation.Generated;
-
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class City {
     private double x;
     private double y;
+    private double costX;
+    private double costY;
+
+    public City(double x, double y, double costX, double costY) {
+        this.x = x;
+        this.y = y;
+        this.costX = costX;
+        this.costY = costY;
+    }
 
     public City(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public double getCostX() {
+        return costX;
+    }
+
+    public double getCostY() {
+        return costY;
     }
 
     public double getX() {
@@ -34,7 +49,9 @@ public class City {
         City city = (City) o;
 
         if (Double.compare(city.x, x) != 0) return false;
-        return Double.compare(city.y, y) == 0;
+        if (Double.compare(city.y, y) != 0) return false;
+        if (Double.compare(city.costX, costX) != 0) return false;
+        return Double.compare(city.costY, costY) == 0;
     }
 
     @Override
@@ -45,6 +62,10 @@ public class City {
         result = (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(y);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(costX);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(costY);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
@@ -53,6 +74,8 @@ public class City {
         return "City{" +
                 "x=" + x +
                 ", y=" + y +
+                ", costX=" + costX +
+                ", costY=" + costY +
                 '}';
     }
 }
