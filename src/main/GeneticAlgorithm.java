@@ -12,12 +12,11 @@ import static main.Util.randomWithRange;
 public class GeneticAlgorithm implements Algorithm {
     //params
     public static int POPULATION_SIZE = 100;
-    public static int GENERATIONS_NUMBER = 800;
+    public static int GENERATIONS_NUMBER = 600;
     public static double MUTATION_PROBABILITY = 0.009;
     public static double CROSSOVER_PROBABILTY = 0.5;
     public static int TOURNAMENT_SIZE = 15;
     public static final boolean ELITISM = false;
-
     //stats
     public static double[] bests = new double[GENERATIONS_NUMBER];
     public static double[] avgs = new double[GENERATIONS_NUMBER];
@@ -44,6 +43,8 @@ public class GeneticAlgorithm implements Algorithm {
             numberOfIndividuals++;
         }
 
+        Mutation mutation = MutationFactory.createMutation(MutationType.SCRAMBLE_MUTATION);
+
         while (numberOfIndividuals < POPULATION_SIZE) {
 
             Route winner = population.selectRouteViaTournament();
@@ -52,22 +53,14 @@ public class GeneticAlgorithm implements Algorithm {
                 Route winner2 = population.selectRouteViaTournament();
                 Route[] childs = crossover(winner, winner2);
 
-                MutationFactory mutationFactory = new MutationFactory();
-                Mutation mutation = mutationFactory.createMutation(MutationType.SCRAMBLE_MUTATION);
                 mutation.mutate(childs[0]);
                 mutation.mutate(childs[1]);
-
-               // mutation(childs[0], MutationType.SCRAMBLE_MUTATION);
-                //mutation(childs[1], MutationType.SCRAMBLE_MUTATION);
 
                 newPopulation.setRoute(childs[0], numberOfIndividuals);
                 newPopulation.setRoute(childs[1], numberOfIndividuals + 1);
 
                 numberOfIndividuals += 2;
             } else {
-
-                //mutation(winner, MutationType.SCRAMBLE_MUTATION);
-
                 newPopulation.setRoute(winner, numberOfIndividuals);
                 numberOfIndividuals++;
             }

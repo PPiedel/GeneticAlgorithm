@@ -3,10 +3,9 @@ package main.mutation;
 /**
  * Created by Pawel_Piedel on 19.10.2017.
  */
-public class MutationFactory extends AbstractFactory {
+public class MutationFactory{
 
-    @Override
-    public Mutation createMutation(MutationType mutationType) {
+    public static Mutation createMutation(MutationType mutationType) {
         Mutation mutation = null;
         switch (mutationType) {
             case SCRAMBLE_MUTATION:
