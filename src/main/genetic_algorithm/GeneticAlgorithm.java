@@ -1,5 +1,9 @@
-package main;
+package main.genetic_algorithm;
 
+import main.Algorithm;
+import main.City;
+import main.Population;
+import main.Route;
 import main.mutation.Mutation;
 import main.mutation.MutationFactory;
 import main.mutation.MutationType;
@@ -12,8 +16,8 @@ import static main.Util.randomWithRange;
 public class GeneticAlgorithm implements Algorithm {
     //params
     public static int POPULATION_SIZE = 100;
-    public static int GENERATIONS_NUMBER = 600;
-    public static double MUTATION_PROBABILITY = 0.009;
+    public static int GENERATIONS_NUMBER = 5000;
+    public static double MUTATION_PROBABILITY = 0.1;
     public static double CROSSOVER_PROBABILTY = 0.5;
     public static int TOURNAMENT_SIZE = 15;
     public static final boolean ELITISM = false;
@@ -22,7 +26,6 @@ public class GeneticAlgorithm implements Algorithm {
     public static double[] avgs = new double[GENERATIONS_NUMBER];
     public static double[] worsts = new double[GENERATIONS_NUMBER];
     public static Route finalRoute;
-
 
     public void ga(City[] cities) {
         Population population = new Population(POPULATION_SIZE);
@@ -43,7 +46,7 @@ public class GeneticAlgorithm implements Algorithm {
             numberOfIndividuals++;
         }
 
-        Mutation mutation = MutationFactory.createMutation(MutationType.SCRAMBLE_MUTATION);
+        Mutation mutation = MutationFactory.createMutation(MutationType.INVERSE_MUTATION);
 
         while (numberOfIndividuals < POPULATION_SIZE) {
 

@@ -11,6 +11,9 @@ public class MutationFactory{
             case SCRAMBLE_MUTATION:
                 mutation = new ScrambleMutation();
                 break;
+            case INVERSE_MUTATION:
+                mutation = new InverseMutation();
+                break;
             default:
                 //ignore
         }

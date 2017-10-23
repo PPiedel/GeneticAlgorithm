@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
-public class Route {
+public class Route implements Comparable<Route> {
     private City[] cities;
 
     public Route() {
@@ -23,6 +23,10 @@ public class Route {
 
     public City[] getCities() {
         return cities;
+    }
+
+    public void setCities(City[] cities) {
+        this.cities = cities;
     }
 
     public double getTotalDistance() {
@@ -96,5 +100,16 @@ public class Route {
             }
         }
         return string;
+    }
+
+    @Override
+    public int compareTo(Route other) {
+        if (getTotalDistance() == other.getTotalDistance()){
+            return 0;
+        }
+        else if (getTotalDistance() > other.getTotalDistance()){
+            return 1;
+        }
+        else return -1;
     }
 }

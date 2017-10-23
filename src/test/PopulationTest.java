@@ -5,9 +5,7 @@ import main.Population;
 import main.Route;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
-import static main.GeneticAlgorithm.TOURNAMENT_SIZE;
+import static main.genetic_algorithm.GeneticAlgorithm.TOURNAMENT_SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 

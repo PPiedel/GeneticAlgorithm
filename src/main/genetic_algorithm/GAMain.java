@@ -1,4 +1,4 @@
-package main;
+package main.genetic_algorithm;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -6,17 +6,17 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
+import main.City;
+import main.Util;
 
-
-import java.util.Arrays;
 
 import static java.util.Arrays.stream;
-import static main.GeneticAlgorithm.*;
+import static main.genetic_algorithm.GeneticAlgorithm.*;
 
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
-public class Main extends Application {
+public class GAMain extends Application {
     public static final String FILE_PATH = "tsp_data/kroA100.tsp";
     public static final String SCND_FILE_PATH = "tsp_data/kroB100.tsp";
 

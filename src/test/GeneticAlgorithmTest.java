@@ -1,6 +1,7 @@
 package test;
 
 import main.*;
+import main.genetic_algorithm.GeneticAlgorithm;
 import main.mutation.MutationType;
 import org.junit.jupiter.api.Test;
 

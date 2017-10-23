@@ -1,7 +1,7 @@
 package main;
 
-import static main.GeneticAlgorithm.POPULATION_SIZE;
-import static main.GeneticAlgorithm.TOURNAMENT_SIZE;
+import static main.genetic_algorithm.GeneticAlgorithm.POPULATION_SIZE;
+import static main.genetic_algorithm.GeneticAlgorithm.TOURNAMENT_SIZE;
 import static main.Util.randomWithRange;
 
 /**
