@@ -1,6 +1,6 @@
 package main.mutation;
 
-import main.Route;
+import main.model.Route;
 
 /**
  * Created by Pawel_Piedel on 19.10.2017.

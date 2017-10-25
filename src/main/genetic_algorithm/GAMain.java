@@ -6,7 +6,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-import main.City;
+import main.model.City;
 import main.Util;
 
 
@@ -18,33 +18,57 @@ import static main.genetic_algorithm.GeneticAlgorithm.*;
  */
 public class GAMain extends Application {
     public static final String FILE_PATH = "tsp_data/kroA100.tsp";
-    public static final String SCND_FILE_PATH = "tsp_data/kroB100.tsp";
-
 
 
     public static void main(String[] args) {
 
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
 
-        City[] cities = Util.openCities(FILE_PATH,SCND_FILE_PATH);
-        //stream(cities).forEach(System.out::println);
+        City[] cities = Util.openCities(FILE_PATH);
 
-        geneticAlgorithm.ga(cities);
 
-        System.out.println("Final distance : "+bests[GENERATIONS_NUMBER-1]);
+        double sum = 0;
+        double[] distances = new double[10];
+        for (int i=0; i < 10; i++){
+            geneticAlgorithm.ga(cities);
+            sum+=geneticAlgorithm.getBestDistance();
+            distances[i] = geneticAlgorithm.getBestDistance();
+        }
+        double average = sum / 10;
 
-        System.out.println("Final route : "+geneticAlgorithm.getFinalRoute().toString());
+        double mean;
+        double sum2=0;
+        for (double distance : distances){
+            sum2+=(distance-average)*(distance-average);
+        }
+        mean = Math.sqrt(sum2/10);
+
+
+        System.out.printf("Sredni wynik : %.2f %n", average);
+        System.out.printf("Odchylenie : %.2f ",mean);
+
+       // System.out.println("Final distance : "+bests[GENERATIONS_NUMBER-1]);
+
 
         launch(args);
+
+        //calculateBestParams();
     }
 
-    private static void calculateBestParams(boolean elitism) {
+    private static void calculateBestParams() {
         double bestDistance = Double.MAX_VALUE;
-        City[] cities = Util.openCities(FILE_PATH,SCND_FILE_PATH);
+        City[] cities = Util.openCities(FILE_PATH);
         for (int tournamentSize = 1; tournamentSize < 20 ;tournamentSize++){
-            for (double mutationProbability = 0.01; mutationProbability < 0.03; mutationProbability+=0.01){
-                for (double crossoverProbability = 0.4; crossoverProbability < 0.6; crossoverProbability+=0.1){
+
+            for (double mutationProbability = 0.01; mutationProbability < 0.2; mutationProbability+=0.01){
+
+                for (double crossoverProbability = 0.1; crossoverProbability < 1; crossoverProbability+=0.1){
                     GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
+                    TOURNAMENT_SIZE = tournamentSize;
+                    MUTATION_PROBABILITY = mutationProbability;
+                    GeneticAlgorithm.CROSSOVER_PROBABILTY = crossoverProbability;
+                    ELITISM = false;
+
                     geneticAlgorithm.ga(cities);
 
                     if (geneticAlgorithm.getFinalRoute().getTotalDistance() < bestDistance){
@@ -52,6 +76,7 @@ public class GAMain extends Application {
                         System.out.println("Mutation probability : "+mutationProbability);
                         System.out.println("Crossover probability : "+crossoverProbability);
                         bestDistance = geneticAlgorithm.getFinalRoute().getTotalDistance();
+                        System.out.println("Best distance : "+bestDistance);
                     }
 
                 }
@@ -69,8 +94,8 @@ public class GAMain extends Application {
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Pokolenie");
-        yAxis.setLabel("Odleglosc");
+        xAxis.setLabel("Generation");
+        yAxis.setLabel("Distance");
 
         //creating the chart
         final LineChart<Number,Number> lineChart = new LineChart<>(xAxis, yAxis);

@@ -1,8 +1,8 @@
 package test;
 
-import main.City;
-import main.Population;
-import main.Route;
+import main.model.City;
+import main.model.Population;
+import main.model.Route;
 import org.junit.jupiter.api.Test;
 
 import static main.genetic_algorithm.GeneticAlgorithm.TOURNAMENT_SIZE;

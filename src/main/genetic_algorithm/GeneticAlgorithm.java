@@ -1,9 +1,9 @@
 package main.genetic_algorithm;
 
 import main.Algorithm;
-import main.City;
-import main.Population;
-import main.Route;
+import main.model.City;
+import main.model.Population;
+import main.model.Route;
 import main.mutation.Mutation;
 import main.mutation.MutationFactory;
 import main.mutation.MutationType;
@@ -16,11 +16,11 @@ import static main.Util.randomWithRange;
 public class GeneticAlgorithm implements Algorithm {
     //params
     public static int POPULATION_SIZE = 100;
-    public static int GENERATIONS_NUMBER = 5000;
-    public static double MUTATION_PROBABILITY = 0.1;
-    public static double CROSSOVER_PROBABILTY = 0.5;
-    public static int TOURNAMENT_SIZE = 15;
-    public static final boolean ELITISM = false;
+    public static int GENERATIONS_NUMBER = 500;
+    public static double MUTATION_PROBABILITY = 0.8;
+    public static double CROSSOVER_PROBABILTY = 0.6;
+    public static int TOURNAMENT_SIZE = 17;
+    public static boolean ELITISM = false;
     //stats
     public static double[] bests = new double[GENERATIONS_NUMBER];
     public static double[] avgs = new double[GENERATIONS_NUMBER];
@@ -82,25 +82,6 @@ public class GeneticAlgorithm implements Algorithm {
         finalRoute = population.getBestRoute();
     }
 
-    public void mutation(Route route, MutationType type) {
-        switch (type) {
-            case SCRAMBLE_MUTATION:
-                scrambleMutation(route);
-                break;
-            default:
-                //ignore
-        }
-
-    }
-
-    private void scrambleMutation(Route route) {
-        for (int i = 0; i < route.length(); i++) {
-            if (shouldBeMutated()) {
-                swapCityAtGivenIndexWithRandomAnotherCity(route, i);
-            }
-        }
-    }
-
     private void swapCityAtGivenIndexWithRandomAnotherCity(Route route, int firstCityIndex) {
         City firstCity = route.getCityAtIndex(firstCityIndex);
         int secondPosition = randomWithRange(0, route.length() - 1);
@@ -151,24 +132,6 @@ public class GeneticAlgorithm implements Algorithm {
 
         return new Route[]{child1, child2};
     }
-
-    /*public void paes(City[] cities, int archiveSize) {
-        Set<Route> archive = new HashSet<>();
-        Route solution = new Route(cities);
-        solution.shuffleCities();
-
-        Route candidate;
-
-        for (int generationNumber = 0; generationNumber < GENERATIONS_NUMBER; generationNumber++) {
-            candidate = new Route(solution.getCities());
-            mutation(candidate,MutationType.SCRAMBLE_MUTATION);
-
-            if (solution.dominates(candidate)){
-
-            }
-        }
-
-    }*/
 
     public double[][] calculateDistancesBetweenCities(City[] cities) {
         double[][] distances = new double[cities.length][cities.length];

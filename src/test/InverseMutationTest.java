@@ -1,7 +1,7 @@
 package test;
 
-import main.City;
-import main.Route;
+import main.model.City;
+import main.model.Route;
 import main.mutation.InverseMutation;
 import org.junit.jupiter.api.Test;
 

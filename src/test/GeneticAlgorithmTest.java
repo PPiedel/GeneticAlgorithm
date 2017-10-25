@@ -1,8 +1,9 @@
 package test;
 
-import main.*;
 import main.genetic_algorithm.GeneticAlgorithm;
-import main.mutation.MutationType;
+import main.model.City;
+import main.model.Population;
+import main.model.Route;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,27 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class GeneticAlgorithmTest {
-
-    @Test
-    public void mutate() throws Exception {
-        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
-        GeneticAlgorithm.MUTATION_PROBABILITY = 1;
-
-        //prepare route
-        City city1 = new City(0, 0);
-        City city2 = new City(10, 10);
-        City city3 = new City(20, 20);
-        Route route = new Route(new City[]{city1, city2, city3});
-
-        //mutation route with probability 1
-        geneticAlgorithm.mutation(route, MutationType.SCRAMBLE_MUTATION);
-
-        //assert that after mutations each city is still in the route
-        assertTrue(route.contains(city1));
-        assertTrue(route.contains(city2));
-        assertTrue(route.contains(city3));
-
-    }
 
     @Test
     public void crossover() throws  Exception {

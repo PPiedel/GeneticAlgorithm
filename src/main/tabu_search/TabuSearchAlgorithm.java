@@ -1,8 +1,8 @@
 package main.tabu_search;
 
 import main.Algorithm;
-import main.City;
-import main.Route;
+import main.model.City;
+import main.model.Route;
 import main.mutation.Mutation;
 import main.mutation.MutationFactory;
 import main.mutation.MutationType;
@@ -10,14 +10,12 @@ import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 import java.util.Arrays;
 
-import static main.Util.randomWithRange;
-
 /**
  * Created by Pawel_Piedel on 23.10.2017.
  */
 public class TabuSearchAlgorithm implements Algorithm {
     public static final int TABU_LIST_LENGTH = 30;
-    public static final int SAMPLES_NUMBER = 100;
+    public static final int SAMPLES_NUMBER = 500;
     public static final int K_NEAREST_NEIGHBOURS = 50;
 
     private Route bestRoute;
@@ -38,8 +36,9 @@ public class TabuSearchAlgorithm implements Algorithm {
                 for (int index = 0; index < nearestNeighbours.length && !found; index++) {
                     if (nearestNeighbours[index].getTotalDistance() < current.getTotalDistance()
                             && !tabu.contains(nearestNeighbours[index])) {
-                        current = nearestNeighbours[index];
+
                         tabu.add(nearestNeighbours[index]);
+                        current = nearestNeighbours[index];
                         found = true;
                     }
                 }

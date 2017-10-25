@@ -1,4 +1,4 @@
-package main;
+package main.model;
 
 import static main.genetic_algorithm.GeneticAlgorithm.POPULATION_SIZE;
 import static main.genetic_algorithm.GeneticAlgorithm.TOURNAMENT_SIZE;
