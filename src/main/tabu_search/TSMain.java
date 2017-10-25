@@ -2,6 +2,7 @@ package main.tabu_search;
 
 import main.model.City;
 import main.Util;
+import main.model.Route;
 
 import static main.genetic_algorithm.GAMain.FILE_PATH;
 
@@ -13,9 +14,9 @@ public class TSMain {
         TabuSearchAlgorithm tabuSearch = new TabuSearchAlgorithm();
         City[] cities = Util.openCities(FILE_PATH);
 
-        tabuSearch.tabuSearch(cities);
+        Route best = tabuSearch.tabuSearch(cities);
 
-        System.out.println("Best distance : "+tabuSearch.getBestDistance());
-        System.out.println("Route : "+tabuSearch.getFinalRoute().toString());
+        System.out.println("Best distance : "+best.getTotalDistance());
+        System.out.println("Route : "+best.toString());
     }
 }

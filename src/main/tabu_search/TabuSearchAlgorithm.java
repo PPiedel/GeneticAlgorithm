@@ -1,6 +1,5 @@
 package main.tabu_search;
 
-import main.Algorithm;
 import main.model.City;
 import main.model.Route;
 import main.mutation.Mutation;
@@ -13,47 +12,46 @@ import java.util.Arrays;
 /**
  * Created by Pawel_Piedel on 23.10.2017.
  */
-public class TabuSearchAlgorithm implements Algorithm {
+public class TabuSearchAlgorithm {
     public static final int TABU_LIST_LENGTH = 30;
     public static final int SAMPLES_NUMBER = 500;
-    public static final int K_NEAREST_NEIGHBOURS = 50;
+    public static final int K_NEAREST_NEIGHBOURS = 30;
 
     private Route bestRoute;
     private double bestDistance = Double.MAX_VALUE;
 
-    public void tabuSearch(City[] cities) {
+
+    public Route tabuSearch(City[] cities) {
+        CircularFifoQueue<Route> tabu = new CircularFifoQueue<>(TABU_LIST_LENGTH);
+        Route current = new Route(cities);
+        current.shuffleCities();
+        Route best = new Route(current.getCities());
+
         for (int sampleNumber = 0; sampleNumber < SAMPLES_NUMBER; sampleNumber++) {
-            CircularFifoQueue<Route> tabu = new CircularFifoQueue<>(TABU_LIST_LENGTH);
-            Route current = new Route(cities);
-            current.shuffleCities();
+            Route[] nearestNeighbours = findKNearestNeighbours(current);
+            Arrays.sort(nearestNeighbours);
 
-            boolean foundedLocalOptimum = false;
-            while (!foundedLocalOptimum){
-                Route[] nearestNeighbours = findKNearestNeighbours(current);
-                Arrays.sort(nearestNeighbours);
-
-                boolean found = false;
-                for (int index = 0; index < nearestNeighbours.length && !found; index++) {
-                    if (nearestNeighbours[index].getTotalDistance() < current.getTotalDistance()
-                            && !tabu.contains(nearestNeighbours[index])) {
-
-                        tabu.add(nearestNeighbours[index]);
-                        current = nearestNeighbours[index];
-                        found = true;
+            boolean found = false;
+            for (int index = 0; index < nearestNeighbours.length && !found; index++) {
+                if (!tabu.contains(nearestNeighbours[index])) { //najlepszy sasiad, ktore nie jest w tabu
+                    found = true;
+                    current = nearestNeighbours[index];
+                    if (current.getTotalDistance() < best.getTotalDistance()) {
+                        best = current;
                     }
-                }
-                if (!found){
-                    foundedLocalOptimum = true;
+
+                    tabu.add(nearestNeighbours[index]);
                 }
             }
+            if (!found) { //wszyscy sasiedzi w tabu
 
+            }
 
-            saveStatistics(tabu);
         }
 
-
+        return best;
     }
-
+        
     private Route[] findKNearestNeighbours(Route route) {
         Route[] nearestNeighbours = new Route[K_NEAREST_NEIGHBOURS];
         Mutation mutation = MutationFactory.createMutation(MutationType.INVERSE_MUTATION);
@@ -67,23 +65,4 @@ public class TabuSearchAlgorithm implements Algorithm {
         return nearestNeighbours;
     }
 
-    private void saveStatistics(CircularFifoQueue<Route> tabu) {
-        for (Route route : tabu) {
-            if (route.getTotalDistance() < bestDistance) {
-                bestDistance = route.getTotalDistance();
-                bestRoute = route;
-            }
-        }
-    }
-
-
-    @Override
-    public double getBestDistance() {
-        return bestRoute.getTotalDistance();
-    }
-
-    @Override
-    public Route getFinalRoute() {
-        return bestRoute;
-    }
 }
