@@ -1,6 +1,5 @@
 package main.genetic_algorithm;
 
-import main.Algorithm;
 import main.model.City;
 import main.model.Population;
 import main.model.Route;
@@ -13,7 +12,7 @@ import static main.Util.randomWithRange;
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
-public class GeneticAlgorithm implements Algorithm {
+public class GeneticAlgorithm {
     //params
     public static int POPULATION_SIZE = 100;
     public static int GENERATIONS_NUMBER = 500;
@@ -21,7 +20,7 @@ public class GeneticAlgorithm implements Algorithm {
     public static double CROSSOVER_PROBABILTY = 0.6;
     public static int TOURNAMENT_SIZE = 17;
     public static boolean ELITISM = false;
-    //stats
+    //currentStats
     public static double[] bests = new double[GENERATIONS_NUMBER];
     public static double[] avgs = new double[GENERATIONS_NUMBER];
     public static double[] worsts = new double[GENERATIONS_NUMBER];
@@ -143,12 +142,12 @@ public class GeneticAlgorithm implements Algorithm {
         return distances;
     }
 
-    @Override
+
     public double getBestDistance() {
         return bests[GENERATIONS_NUMBER - 1];
     }
 
-    @Override
+
     public Route getFinalRoute() {
         return finalRoute;
     }

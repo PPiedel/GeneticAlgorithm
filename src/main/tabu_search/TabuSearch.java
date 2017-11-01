@@ -12,14 +12,13 @@ import java.util.Arrays;
 /**
  * Created by Pawel_Piedel on 23.10.2017.
  */
-public class TabuSearchAlgorithm {
-    public static final int TABU_LIST_LENGTH = 30;
-    public static final int SAMPLES_NUMBER = 500;
-    public static final int K_NEAREST_NEIGHBOURS = 30;
+public class TabuSearch {
+    public static final int TABU_LIST_LENGTH = 10;
+    public static final int K_NEAREST_NEIGHBOURS = 5000;
+    public static final int SAMPLES_NUMBER = 100;
 
-    private Route bestRoute;
-    private double bestDistance = Double.MAX_VALUE;
-
+    public static double[] currentStats = new double[SAMPLES_NUMBER];
+    public static double[] bestStats = new double[SAMPLES_NUMBER];
 
     public Route tabuSearch(City[] cities) {
         CircularFifoQueue<Route> tabu = new CircularFifoQueue<>(TABU_LIST_LENGTH);
@@ -33,7 +32,7 @@ public class TabuSearchAlgorithm {
 
             boolean found = false;
             for (int index = 0; index < nearestNeighbours.length && !found; index++) {
-                if (!tabu.contains(nearestNeighbours[index])) { //najlepszy sasiad, ktore nie jest w tabu
+                if (!tabu.contains(nearestNeighbours[index])) {
                     found = true;
                     current = nearestNeighbours[index];
                     if (current.getTotalDistance() < best.getTotalDistance()) {
@@ -41,17 +40,16 @@ public class TabuSearchAlgorithm {
                     }
 
                     tabu.add(nearestNeighbours[index]);
-                }
-            }
-            if (!found) { //wszyscy sasiedzi w tabu
 
+                    saveStatistics(current, best, sampleNumber);
+                }
             }
 
         }
 
         return best;
     }
-        
+
     private Route[] findKNearestNeighbours(Route route) {
         Route[] nearestNeighbours = new Route[K_NEAREST_NEIGHBOURS];
         Mutation mutation = MutationFactory.createMutation(MutationType.INVERSE_MUTATION);
@@ -64,5 +62,12 @@ public class TabuSearchAlgorithm {
 
         return nearestNeighbours;
     }
+
+    private void saveStatistics(Route current, Route best, int sampleNumber) {
+        currentStats[sampleNumber] = current.getTotalDistance();
+        bestStats[sampleNumber] = best.getTotalDistance();
+    }
+
+
 
 }

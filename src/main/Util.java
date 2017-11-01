@@ -13,6 +13,9 @@ import java.util.List;
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class Util {
+    public static final String FILE_PATH = "tsp_data/kroE100.tsp";
+
+
     public static int randomWithRange(int min, int max) {
         int range = (max - min) + 1;
         return (int) (Math.random() * range) + min;
@@ -23,7 +26,6 @@ public class Util {
         File distanceFile = new File(firstFilePath);
 
         BufferedReader reader1 = null;
-        BufferedReader reader2 = null;
 
         try {
             reader1 = new BufferedReader(new FileReader(distanceFile));

@@ -1,19 +1,20 @@
-package main.tabu_search;
+package test;
 
 import main.Util;
 import main.model.City;
 import main.model.Route;
+import main.tabu_search.TabuSearch;
 import org.junit.jupiter.api.Test;
 
-import static main.genetic_algorithm.GAMain.FILE_PATH;
+import static main.Util.FILE_PATH;
 
 /**
  * Created by Pawel_Piedel on 25.10.2017.
  */
-public class TabuSearchAlgorithmTest {
+public class TabuSearchTest {
     @Test
     public void tabuSearch2() throws Exception {
-        TabuSearchAlgorithm ts = new TabuSearchAlgorithm();
+        TabuSearch ts = new TabuSearch();
         City[] cities = Util.openCities(FILE_PATH);
         Route route = ts.tabuSearch(cities);
 

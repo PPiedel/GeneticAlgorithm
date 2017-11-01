@@ -1,4 +1,4 @@
-package main.tabu_search;
+package main.simulated_annealing;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,27 +10,27 @@ import main.Util;
 import main.model.City;
 import main.model.Route;
 
-import static main.Util.FILE_PATH;
-import static main.tabu_search.TabuSearch.bestStats;
-import static main.tabu_search.TabuSearch.currentStats;
+import static main.simulated_annealing.SimulatedAnnealing.current;
+import static main.tabu_search.TSMain.ITER_NUMBER;
 
 /**
- * Created by Pawel_Piedel on 23.10.2017.
+ * Created by Pawel_Piedel on 26.10.2017.
  */
-public class TSMain extends Application {
-    public static final int ITER_NUMBER = 10;
+public class SAMain extends Application {
 
     public static void main(String[] args) {
-        TabuSearch tabuSearch = new TabuSearch();
-        City[] cities = Util.openCities(FILE_PATH);
+        City[] cities = Util.openCities(Util.FILE_PATH);
+        SimulatedAnnealing simulatedAnnealingAlgorithm = new SimulatedAnnealing();
 
         double sum = 0;
         double[] distances = new double[ITER_NUMBER];
-        Route best;
+        Route current;
         for (int i = 0; i < ITER_NUMBER; i++) {
-            best = tabuSearch.tabuSearch(cities);
-            sum += best.getTotalDistance();
-            distances[i] = best.getTotalDistance();
+            SimulatedAnnealing.current.clear();
+            current = simulatedAnnealingAlgorithm.simulatedAnnealing(cities);
+            sum += current.getTotalDistance();
+            distances[i] = current.getTotalDistance();
+            System.out.println("" + i);
         }
         double average = sum / ITER_NUMBER;
 
@@ -44,7 +44,9 @@ public class TSMain extends Application {
         System.out.printf("Average distance %.2f : \n", average);
         System.out.printf("Mean : %.2f ", mean);
 
+
         launch(args);
+
     }
 
     @Override
@@ -53,22 +55,20 @@ public class TSMain extends Application {
     }
 
     public void paintChart(Stage stage) {
-        stage.setTitle("Genetic Algorithm");
+        stage.setTitle("SA Algorithm");
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Sample number");
+        xAxis.setLabel("X");
         yAxis.setLabel("Distance");
 
         //creating the chart
         final LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
 
         XYChart.Series currentSeries = getCurrentSeries();
-        XYChart.Series bestSeries = getBestSeries();
 
         Scene scene = new Scene(lineChart, 800, 600);
         lineChart.getData().add(currentSeries);
-        lineChart.getData().add(bestSeries);
         stage.setScene(scene);
         stage.show();
     }
@@ -77,19 +77,9 @@ public class TSMain extends Application {
         XYChart.Series currentSeries = new XYChart.Series();
         currentSeries.setName("Current distance");
 
-        for (int i = 0; i < currentStats.length; i++) {
-            currentSeries.getData().add(new XYChart.Data(i, currentStats[i]));
+        for (int i = 0; i < current.size(); i = i + 10) {
+            currentSeries.getData().add(new XYChart.Data(i, current.get(i)));
         }
         return currentSeries;
-    }
-
-    private XYChart.Series getBestSeries() {
-        XYChart.Series bestSeries = new XYChart.Series();
-        bestSeries.setName("Best distance");
-
-        for (int i = 0; i < bestStats.length; i++) {
-            bestSeries.getData().add(new XYChart.Data(i, bestStats[i]));
-        }
-        return bestSeries;
     }
 }

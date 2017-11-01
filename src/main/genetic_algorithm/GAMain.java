@@ -6,20 +6,16 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-import main.model.City;
 import main.Util;
+import main.model.City;
 
-
-import static java.util.Arrays.stream;
+import static main.Util.FILE_PATH;
 import static main.genetic_algorithm.GeneticAlgorithm.*;
 
 /**
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class GAMain extends Application {
-    public static final String FILE_PATH = "tsp_data/kroA100.tsp";
-
-
     public static void main(String[] args) {
 
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
