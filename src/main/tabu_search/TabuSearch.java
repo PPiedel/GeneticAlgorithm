@@ -20,6 +20,19 @@ public class TabuSearch {
     public static double[] currentStats = new double[SAMPLES_NUMBER];
     public static double[] bestStats = new double[SAMPLES_NUMBER];
 
+    public static Route[] findKNearestNeighbours(Route route, int kNearestNeighbours) {
+        Route[] nearestNeighbours = new Route[kNearestNeighbours];
+        Mutation mutation = MutationFactory.createMutation(MutationType.INVERSE_MUTATION);
+
+        for (int i = 0; i < kNearestNeighbours; i++) {
+            Route nearestNeighbour = new Route(route.getCities());
+            mutation.mutate(nearestNeighbour);
+            nearestNeighbours[i] = nearestNeighbour;
+        }
+
+        return nearestNeighbours;
+    }
+
     public Route tabuSearch(City[] cities) {
         CircularFifoQueue<Route> tabu = new CircularFifoQueue<>(TABU_LIST_LENGTH);
         Route current = new Route(cities);
@@ -27,7 +40,7 @@ public class TabuSearch {
         Route best = new Route(current.getCities());
 
         for (int sampleNumber = 0; sampleNumber < SAMPLES_NUMBER; sampleNumber++) {
-            Route[] nearestNeighbours = findKNearestNeighbours(current);
+            Route[] nearestNeighbours = findKNearestNeighbours(current, K_NEAREST_NEIGHBOURS);
             Arrays.sort(nearestNeighbours);
 
             boolean found = false;
@@ -50,24 +63,10 @@ public class TabuSearch {
         return best;
     }
 
-    private Route[] findKNearestNeighbours(Route route) {
-        Route[] nearestNeighbours = new Route[K_NEAREST_NEIGHBOURS];
-        Mutation mutation = MutationFactory.createMutation(MutationType.INVERSE_MUTATION);
-
-        for (int i = 0; i < K_NEAREST_NEIGHBOURS; i++) {
-            Route nearestNeighbour = new Route(route.getCities());
-            mutation.mutate(nearestNeighbour);
-            nearestNeighbours[i] = nearestNeighbour;
-        }
-
-        return nearestNeighbours;
-    }
-
     private void saveStatistics(Route current, Route best, int sampleNumber) {
         currentStats[sampleNumber] = current.getTotalDistance();
         bestStats[sampleNumber] = best.getTotalDistance();
     }
-
 
 
 }

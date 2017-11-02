@@ -10,7 +10,7 @@ import main.Util;
 import main.model.City;
 import main.model.Route;
 
-import static main.simulated_annealing.SimulatedAnnealing.current;
+import static main.simulated_annealing.SimulatedAnnealing.currentDistances;
 import static main.tabu_search.TSMain.ITER_NUMBER;
 
 /**
@@ -26,7 +26,7 @@ public class SAMain extends Application {
         double[] distances = new double[ITER_NUMBER];
         Route current;
         for (int i = 0; i < ITER_NUMBER; i++) {
-            SimulatedAnnealing.current.clear();
+            SimulatedAnnealing.currentDistances.clear();
             current = simulatedAnnealingAlgorithm.simulatedAnnealing(cities);
             sum += current.getTotalDistance();
             distances[i] = current.getTotalDistance();
@@ -77,8 +77,8 @@ public class SAMain extends Application {
         XYChart.Series currentSeries = new XYChart.Series();
         currentSeries.setName("Current distance");
 
-        for (int i = 0; i < current.size(); i = i + 10) {
-            currentSeries.getData().add(new XYChart.Data(i, current.get(i)));
+        for (int i = 0; i < currentDistances.size(); i = i + 10) {
+            currentSeries.getData().add(new XYChart.Data(i, currentDistances.get(i)));
         }
         return currentSeries;
     }
