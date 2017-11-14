@@ -10,6 +10,7 @@ import main.Util;
 import main.model.City;
 import main.model.Route;
 
+import static main.model.Route.EVALUATE_FUNCTION_NUMBER;
 import static main.simulated_annealing.SimulatedAnnealing.currentDistances;
 import static main.tabu_search.TSMain.ITER_NUMBER;
 
@@ -39,13 +40,13 @@ public class SAMain extends Application {
         for (double distance : distances) {
             sum2 += (distance - average) * (distance - average);
         }
-        mean = Math.sqrt(sum2 / 10);
+        mean = Math.sqrt(sum2 / ITER_NUMBER);
 
         System.out.printf("Average distance %.2f : \n", average);
-        System.out.printf("Mean : %.2f ", mean);
+        System.out.printf("Mean : %.2f \n", mean);
+        System.out.println("Liczba obliczen funkcji oceny : " + EVALUATE_FUNCTION_NUMBER / ITER_NUMBER);
 
-
-        launch(args);
+        // launch(args);
 
     }
 

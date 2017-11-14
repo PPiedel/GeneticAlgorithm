@@ -1,8 +1,8 @@
 package main.model;
 
+import static main.Util.randomWithRange;
 import static main.genetic_algorithm.GeneticAlgorithm.POPULATION_SIZE;
 import static main.genetic_algorithm.GeneticAlgorithm.TOURNAMENT_SIZE;
-import static main.Util.randomWithRange;
 
 /**
  * Created by Pawel_Piedel on 09.10.2017.
@@ -19,6 +19,10 @@ public class Population {
         this.routes = routes;
     }
 
+    public Route[] getRoutes() {
+        return routes;
+    }
+
     public double getBestDistance() {
         double bestDistance = Integer.MAX_VALUE;
         for (Route route : routes) {
@@ -30,11 +34,11 @@ public class Population {
     }
 
 
-    public Route getBestRoute(){
+    public Route getBestRoute() {
         int bestIndex = 0;
         double bestDistance = getBestDistance();
-        for (int i=0; i<routes.length; i++){
-            if (routes[i].getTotalDistance() == bestDistance){
+        for (int i = 0; i < routes.length; i++) {
+            if (routes[i].getTotalDistance() == bestDistance) {
                 bestIndex = i;
             }
         }
@@ -69,14 +73,15 @@ public class Population {
         }
     }
 
-    public Route selectRouteViaTournament(){
+
+    public Route selectRouteViaTournament() {
         int bestIndex = Integer.MAX_VALUE;
         double bestValue = Integer.MAX_VALUE;
 
-        for (int i=0; i< TOURNAMENT_SIZE; i++){
-            int index = randomWithRange(0,routes.length-1);
+        for (int i = 0; i < TOURNAMENT_SIZE; i++) {
+            int index = randomWithRange(0, routes.length - 1);
 
-            if (routes[index].getTotalDistance() < bestValue){
+            if (routes[index].getTotalDistance() < bestValue) {
                 bestIndex = index;
                 bestValue = routes[index].getTotalDistance();
             }
@@ -85,7 +90,7 @@ public class Population {
         return routes[bestIndex];
     }
 
-    public void setRoute(Route route, int index){
+    public void setRoute(Route route, int index) {
         routes[index] = route;
     }
 }

@@ -7,6 +7,10 @@ import main.mutation.Mutation;
 import main.mutation.MutationFactory;
 import main.mutation.MutationType;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import static main.Util.randomWithRange;
 
 /**
@@ -14,26 +18,38 @@ import static main.Util.randomWithRange;
  */
 public class GeneticAlgorithm {
     //params
-    public static int POPULATION_SIZE = 100;
-    public static int GENERATIONS_NUMBER = 500;
+    public static int POPULATION_SIZE = 600;
+    public static int GENERATIONS_NUMBER = 300;
     public static double MUTATION_PROBABILITY = 0.8;
     public static double CROSSOVER_PROBABILTY = 0.6;
-    public static int TOURNAMENT_SIZE = 17;
-    public static boolean ELITISM = false;
+    public static int TOURNAMENT_SIZE = 51;
+    public static boolean ELITISM = true;
     //currentStats
-    public static double[] bests = new double[GENERATIONS_NUMBER];
-    public static double[] avgs = new double[GENERATIONS_NUMBER];
-    public static double[] worsts = new double[GENERATIONS_NUMBER];
+    public static List<Double> bests = new ArrayList<>();
+    public static List<Double> avgs = new ArrayList<>();
+    public static List<Double> worsts = new ArrayList<>();
     public static Route finalRoute;
 
-    public void ga(City[] cities) {
+    public void ga(City[] cities, long time) {
         Population population = new Population(POPULATION_SIZE);
         population.initializeRoutesInRandomOrder(cities);
+        long startTime = System.currentTimeMillis();
+        long elapsedTime = 0L;
 
-        for (int generationNumber = 0; generationNumber < GENERATIONS_NUMBER; generationNumber++) {
+        int generationNumber = 0;
+        while (elapsedTime < time) {
+            population = evolveIntoNewPopulation(population, ELITISM);
+            elapsedTime = (new Date()).getTime() - startTime;
+            savePopulationStatistics(population, generationNumber);
+            generationNumber++;
+        }
+
+        /*for (int generationNumber = 0; generationNumber < GENERATIONS_NUMBER; generationNumber++) {
             population = evolveIntoNewPopulation(population, ELITISM);
             savePopulationStatistics(population, generationNumber);
-        }
+
+
+        }*/
     }
 
     private Population evolveIntoNewPopulation(Population population, boolean elitism) {
@@ -74,23 +90,16 @@ public class GeneticAlgorithm {
 
 
     private void savePopulationStatistics(Population population, int i) {
-        bests[i] = population.getBestDistance();
-        avgs[i] = population.getAverageDistance();
-        worsts[i] = population.getWorseDistance();
+        bests.add(population.getBestDistance());
+        avgs.add(population.getAverageDistance());
+        worsts.add(population.getWorseDistance());
 
-        finalRoute = population.getBestRoute();
-    }
+        if (finalRoute == null) {
+            finalRoute = population.getBestRoute();
+        } else if (population.getBestDistance() < finalRoute.getTotalDistance()) {
+            finalRoute = population.getBestRoute();
+        }
 
-    private void swapCityAtGivenIndexWithRandomAnotherCity(Route route, int firstCityIndex) {
-        City firstCity = route.getCityAtIndex(firstCityIndex);
-        int secondPosition = randomWithRange(0, route.length() - 1);
-
-        route.setCity(route.getCityAtIndex(secondPosition), firstCityIndex);
-        route.setCity(firstCity, secondPosition);
-    }
-
-    public boolean shouldBeMutated() {
-        return Math.random() < MUTATION_PROBABILITY;
     }
 
     public boolean shouldBeCrossovered() {
@@ -102,7 +111,6 @@ public class GeneticAlgorithm {
 
         return createChildsFromParents(parent1, parent2, crossPoint);
     }
-
 
     private Route[] createChildsFromParents(Route parent1, Route parent2, int crossPoint) {
         Route child1 = new Route(parent1.length());
@@ -144,7 +152,7 @@ public class GeneticAlgorithm {
 
 
     public double getBestDistance() {
-        return bests[GENERATIONS_NUMBER - 1];
+        return finalRoute.getTotalDistance();
     }
 
 

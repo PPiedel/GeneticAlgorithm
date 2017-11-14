@@ -11,6 +11,8 @@ import main.model.City;
 import main.model.Route;
 
 import static main.Util.FILE_PATH;
+import static main.genetic_algorithm.GAMain.TIME;
+import static main.model.Route.EVALUATE_FUNCTION_NUMBER;
 import static main.tabu_search.TabuSearch.bestStats;
 import static main.tabu_search.TabuSearch.currentStats;
 
@@ -18,7 +20,7 @@ import static main.tabu_search.TabuSearch.currentStats;
  * Created by Pawel_Piedel on 23.10.2017.
  */
 public class TSMain extends Application {
-    public static final int ITER_NUMBER = 10;
+    public static final int ITER_NUMBER = 1;
 
     public static void main(String[] args) {
         TabuSearch tabuSearch = new TabuSearch();
@@ -28,9 +30,10 @@ public class TSMain extends Application {
         double[] distances = new double[ITER_NUMBER];
         Route best;
         for (int i = 0; i < ITER_NUMBER; i++) {
-            best = tabuSearch.tabuSearch(cities);
+            best = tabuSearch.tabuSearch(cities, TIME);
             sum += best.getTotalDistance();
             distances[i] = best.getTotalDistance();
+            System.out.println("Iteracja : " + i);
         }
         double average = sum / ITER_NUMBER;
 
@@ -42,7 +45,8 @@ public class TSMain extends Application {
         mean = Math.sqrt(sum2 / 10);
 
         System.out.printf("Average distance %.2f : \n", average);
-        System.out.printf("Mean : %.2f ", mean);
+        System.out.printf("Mean : %.2f \n", mean);
+        System.out.println("Liczba obliczen funkcji oceny : " + EVALUATE_FUNCTION_NUMBER / ITER_NUMBER);
 
         launch(args);
     }
@@ -77,8 +81,8 @@ public class TSMain extends Application {
         XYChart.Series currentSeries = new XYChart.Series();
         currentSeries.setName("Current distance");
 
-        for (int i = 0; i < currentStats.length; i++) {
-            currentSeries.getData().add(new XYChart.Data(i, currentStats[i]));
+        for (int i = 0; i < currentStats.size(); i++) {
+            currentSeries.getData().add(new XYChart.Data(i, currentStats.get(i)));
         }
         return currentSeries;
     }
@@ -87,8 +91,8 @@ public class TSMain extends Application {
         XYChart.Series bestSeries = new XYChart.Series();
         bestSeries.setName("Best distance");
 
-        for (int i = 0; i < bestStats.length; i++) {
-            bestSeries.getData().add(new XYChart.Data(i, bestStats[i]));
+        for (int i = 0; i < bestStats.size(); i++) {
+            bestSeries.getData().add(new XYChart.Data(i, bestStats.get(i)));
         }
         return bestSeries;
     }

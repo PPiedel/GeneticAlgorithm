@@ -6,6 +6,7 @@ import java.util.Random;
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class Route implements Comparable<Route> {
+    public static int EVALUATE_FUNCTION_NUMBER = 0;
     private City[] cities;
 
     public Route() {
@@ -40,6 +41,8 @@ public class Route implements Comparable<Route> {
                 totalDistance += cities[i].distanceTo(cities[0]);
             }
         }
+
+        EVALUATE_FUNCTION_NUMBER++;
 
         return totalDistance;
     }
@@ -93,23 +96,15 @@ public class Route implements Comparable<Route> {
 
     @Override
     public String toString() {
-        String string = "";
-        for (City city : cities) {
-            if (city != null) {
-                string += city.toString() + " ";
-            }
-        }
-        return string;
+        return "" + getTotalDistance();
     }
 
     @Override
     public int compareTo(Route other) {
-        if (getTotalDistance() == other.getTotalDistance()){
+        if (getTotalDistance() == other.getTotalDistance()) {
             return 0;
-        }
-        else if (getTotalDistance() > other.getTotalDistance()){
+        } else if (getTotalDistance() > other.getTotalDistance()) {
             return 1;
-        }
-        else return -1;
+        } else return -1;
     }
 }

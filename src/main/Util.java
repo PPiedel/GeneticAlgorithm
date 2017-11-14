@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Pawel_Piedel on 09.10.2017.
  */
 public class Util {
-    public static final String FILE_PATH = "tsp_data/kroE100.tsp";
+    public static final String FILE_PATH = "tsp_data/uruguay.tsp";
 
 
     public static int randomWithRange(int min, int max) {
